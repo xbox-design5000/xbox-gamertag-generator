@@ -2,12 +2,37 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import Header from "../components/layout/Header.astro";
 
+const pageUrl = "https://xboxgamertaggenerator.com/xbox-gamertag-search";
+
+const faqItems = [
+  {
+    question: "How do I search for someone's Xbox gamertag?",
+    answer: "Enter their exact gamertag in the search field and click Look Up. The tool will search for the public Xbox Live profile connected to that name."
+  },
+  {
+    question: "Can you look someone up by their gamertag?",
+    answer: "Yes. If the player has a public Xbox profile you can look them up using their gamertag. Private profiles will not show data."
+  },
+  {
+    question: "Does this tool show real-time Xbox data?",
+    answer: "This tool pulls publicly available data from Xbox Live. Results are not live and may not reflect the most recent activity. For the latest stats, check the Xbox app directly."
+  },
+  {
+    question: "What if someone's profile is set to private?",
+    answer: "If a profile is set to private, no data will appear in the search results. Only the account holder can view private profile information."
+  },
+  {
+    question: "Can I see someone's game history by gamertag?",
+    answer: "Yes, if their profile is set to public. Recent game history and achievements may be visible depending on the player's privacy settings."
+  }
+];
+
 const schema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Gamer Profile Checker",
-  "url": "https://xboxgamertaggenerator.com/xbox-gamertag-search",
-  "description": "Look up public Xbox gamer profiles, gamerscore, gamerpic, bio, profile details, and recent game history with this free Gamer Profile Checker.",
+  "name": "Xbox Gamertag Search",
+  "url": pageUrl,
+  "description": "Search any Xbox gamertag and look up public profile details, Gamerscore, achievements, and game history. Free Xbox profile lookup tool.",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Web",
   "inLanguage": "en-US",
@@ -24,20 +49,35 @@ const schema = {
   },
   "potentialAction": {
     "@type": "UseAction",
-    "target": "https://xboxgamertaggenerator.com/xbox-gamertag-search"
+    "target": pageUrl
   }
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map((item) => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
 };
 ---
 
 <MainLayout
-  title="Gamer Profile Checker – Xbox Profile, Gamerscore, Bio & Game History"
-  description="Look up public Xbox gamer profiles, gamerscore, gamerpic, bio, profile details, and recent game history instantly with our free Gamer Profile Checker."
-  canonical="https://xboxgamertaggenerator.com/xbox-gamertag-search"
+  title="Xbox Gamertag Search — Look Up Xbox Profiles, Gamerscore & Stats"
+  description="Search any Xbox gamertag and look up public profile details, Gamerscore, achievements, and game history. Free Xbox profile lookup tool — no sign-up needed."
+  canonical={pageUrl}
   {schema}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <Header />
 
   <div class="min-h-screen bg-[#F3F4F6] text-[#111827] font-ui">
+
     <!-- ── Hero ── -->
     <section class="section-dark-alt py-8">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
@@ -46,22 +86,16 @@ const schema = {
 
           <div class="relative z-10">
             <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand-dim border border-green rounded-sm mb-6">
-              <span class="label-green">Xbox Tools</span>
+              <span class="label-green">Free Tool</span>
             </div>
 
-         <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground mb-4 leading-tight">
-  Xbox Gamertag <span class="text-brand">Search</span>
-</h1>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground mb-4 leading-tight">
+              Xbox Gamertag <span class="text-brand">Search</span>
+            </h1>
 
-<div class="max-w-3xl mx-auto">
-  <p class="text-foreground-muted text-sm md:text-base leading-relaxed">
-    Use our Xbox Gamertag Search tool to quickly find and view any Xbox Live account. This fast and reliable Xbox profile search lets you look up player information across Xbox 360, Xbox One, and Xbox Series X|S.
-  </p>
-
-  <p class="mt-4 text-foreground-muted text-xs md:text-sm leading-relaxed">
-    Whether you’re trying to find a specific player or verify an account, our tool makes Xbox gamertag search simple and accurate. You can also check Xbox gamertag history to see past username changes and track activity over time. Designed for speed and ease of use, this is the ideal solution for anyone needing a complete Xbox profile search experience.
-  </p>
-</div>
+            <p class="text-foreground-muted text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+              The Xbox Gamertag Search tool lets you look up public Xbox profiles by gamertag. Enter any gamertag below to see available profile details including Gamerscore, recent games, and achievements.
+            </p>
           </div>
         </div>
       </div>
@@ -69,28 +103,29 @@ const schema = {
 
     <!-- ── Tool ── -->
     <section class="section-white-subtle py-10">
-     <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-5">
-   <!-- Search Card -->
-<div class="mx-auto w-full max-w-3xl bg-white border border-[#E5E7EB] rounded-xl p-6 md:p-7 shadow-lg">
-  <div class="flex flex-col sm:flex-row gap-3">
-    <input
-      id="profile-input"
-      class="w-full px-4 py-3 bg-[#F8FAFC] border border-[#E5E7EB] rounded-lg text-[#111827] placeholder-[#9CA3AF] text-sm font-medium focus:outline-none focus:border-[#00D02B] focus:ring-2 focus:ring-[#00D02B]/15 transition-colors"
-      type="text"
-      placeholder="Enter gamertag…"
-      maxlength="15"
-      autocomplete="off"
-      spellcheck="false"
-    />
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-5">
 
-    <button
-      id="search-btn"
-      class="px-6 py-3 bg-brand hover:bg-brand-light text-white font-semibold text-sm uppercase tracking-[0.14em] rounded-lg transition-colors duration-200 whitespace-nowrap"
-    >
-      Look Up
-    </button>
-  </div>
-</div>
+        <!-- Search Card -->
+        <div class="mx-auto w-full max-w-3xl bg-white border border-[#E5E7EB] rounded-xl p-6 md:p-7 shadow-lg">
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input
+              id="profile-input"
+              class="w-full px-4 py-3 bg-[#F8FAFC] border border-[#E5E7EB] rounded-lg text-[#111827] placeholder-[#9CA3AF] text-sm font-medium focus:outline-none focus:border-[#00D02B] focus:ring-2 focus:ring-[#00D02B]/15 transition-colors"
+              type="text"
+              placeholder="Enter gamertag…"
+              maxlength="15"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button
+              id="search-btn"
+              class="px-6 py-3 bg-brand hover:bg-brand-light text-white font-semibold text-sm uppercase tracking-[0.14em] rounded-lg transition-colors duration-200 whitespace-nowrap"
+            >
+              Look Up
+            </button>
+          </div>
+        </div>
+
         <!-- Loading -->
         <div id="loading" class="hidden mt-8 flex items-center justify-center gap-3 text-[#6B7280] text-sm">
           <svg class="animate-spin w-5 h-5 text-brand" fill="none" viewBox="0 0 24 24">
@@ -123,11 +158,8 @@ const schema = {
 
               <div class="text-center sm:text-left flex-1 min-w-0">
                 <h2 id="profile-gamertag" class="text-2xl md:text-3xl font-extrabold text-[#111827]"></h2>
-
                 <p id="profile-bio" class="hidden text-[#6B7280] text-sm mt-2 max-w-xl"></p>
-
                 <div id="profile-meta" class="hidden flex flex-wrap justify-center sm:justify-start gap-3 mt-3"></div>
-
                 <div id="profile-badges" class="hidden flex flex-wrap justify-center sm:justify-start gap-2 mt-4"></div>
               </div>
             </div>
@@ -136,10 +168,7 @@ const schema = {
             <div id="stats-divider" class="hidden border-t border-[#E5E7EB] my-6"></div>
 
             <!-- Dynamic Stats Grid -->
-            <div
-              id="profile-stats-grid"
-              class="hidden grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
-            ></div>
+            <div id="profile-stats-grid" class="hidden grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
 
             <!-- Game History Divider -->
             <div id="history-divider" class="hidden border-t border-[#E5E7EB] my-6"></div>
@@ -152,17 +181,16 @@ const schema = {
                   <h3 class="text-xl md:text-2xl font-extrabold text-[#111827] mt-1">Game History</h3>
                 </div>
               </div>
-<div id="game-history-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-
-<div id="game-history-actions" class="hidden mt-5 flex justify-center">
-  <button
-    id="show-more-history-btn"
-    class="px-5 py-3 bg-brand hover:bg-brand-light text-white font-semibold text-sm uppercase tracking-[0.14em] rounded-lg transition-colors duration-200"
-    type="button"
-  >
-    Show More
-  </button>
-</div>
+              <div id="game-history-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+              <div id="game-history-actions" class="hidden mt-5 flex justify-center">
+                <button
+                  id="show-more-history-btn"
+                  class="px-5 py-3 bg-brand hover:bg-brand-light text-white font-semibold text-sm uppercase tracking-[0.14em] rounded-lg transition-colors duration-200"
+                  type="button"
+                >
+                  Show More
+                </button>
+              </div>
             </div>
 
           </div>
@@ -176,35 +204,234 @@ const schema = {
 
       </div>
     </section>
+
+    <!-- ── Article Sections ── -->
+    <section
+      class="pt-8 md:pt-16 pb-8"
+      style="background-color: hsl(220 14% 96%); width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;"
+    >
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-12">
+
+
+         <section
+  class="pt-8 md:pt-16 pb-8"
+  style="background-color: #ffffff; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-12">
+
+        <!-- H2-1: How to Search -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            How to Search an Xbox Gamertag
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Enter the exact gamertag in the search field and click Look Up. The tool will search for the public Xbox Live profile connected to that gamertag and display whatever information is publicly available.
+          </p>
+          <ol class="mb-0 space-y-2" style="list-style: decimal; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">Enter the gamertag you want to look up</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">Click <strong style="color: #111827;">Look Up</strong> to search Xbox Live</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">View the public profile details that appear</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              If you want a profile card for your own gamertag, try our <a href="/gamercard-generator" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Xbox Gamercard Generator</a>
+            </li>
+          </ol>
+        </div>
+
+        <!-- H2-2: What You Can See -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            What You Can See on a Public Xbox Profile
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            A public Xbox profile can show the player's gamertag, Gamerscore, recent games played, achievements, and account status. What appears depends entirely on the player's privacy settings. Some players set their profile to private which limits what others can see.
+          </p>
+          <ul class="mb-4 space-y-2" style="list-style: disc; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;"><strong style="color: #111827;">Gamertag</strong> — the public Xbox username</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;"><strong style="color: #111827;">Gamerscore</strong> — total achievement points earned</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;"><strong style="color: #111827;">Recent games</strong> — titles played recently</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;"><strong style="color: #111827;">Achievements</strong> — completed in-game challenges</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;"><strong style="color: #111827;">Account status</strong> — active or inactive</li>
+          </ul>
+          <p class="mb-0" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            This tool only shows publicly available data. Private profiles will show limited or no information.
+          </p>
+        </div>
+
+</div>
+</section>
+
+        <!-- H2-3: What Is Gamerscore -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            What Is Gamerscore on Xbox?
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Gamerscore is a point total that Xbox players earn by completing in-game achievements. Each achievement has a point value assigned by the game developer. Your total Gamerscore appears on your public Xbox profile and is visible to other players.
+          </p>
+          <p class="mb-0" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Gamerscore has no direct in-game value — it cannot be spent or traded. It is a public measure of gaming activity and achievement completion across all Xbox and PC games connected to your Microsoft account.
+          </p>
+        </div>
+
+        <!-- H2-4: Privacy -->
+        <div class="mb-0">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            Xbox Profile Privacy — What Is Public and Private
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Xbox gives players full control over what appears on their public profile. If a player has set their profile to private, other players and third-party tools cannot see their stats, game history, or achievements. Only the player themselves can view private profile data.
+          </p>
+          <ul class="mb-4 space-y-2" style="list-style: disc; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;"><strong style="color: #111827;">Public profile</strong> — Gamerscore, recent games, and achievements are visible</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;"><strong style="color: #111827;">Friends only</strong> — data is visible only to Xbox friends</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;"><strong style="color: #111827;">Private profile</strong> — no data is visible to others</li>
+          </ul>
+          <p class="mb-0" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            If a search returns limited results it is likely because the player has set their profile to private or friends only.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Related Tools ── -->
+    <section class="section-white-subtle py-16 md:py-20">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="heading-section text-brand mb-3">Related Xbox Gamertag Tools</h2>
+          <p class="text-sm md:text-base font-ui leading-relaxed max-w-2xl mx-auto" style="color: hsl(215 16% 47%);">
+            After using this tool, explore our other free Xbox tools to complete your gaming identity.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            { title: "Xbox Gamertag Generator", desc: "Generate cool, funny, short, and unique Xbox gamertag ideas instantly.", href: "/", anchor: "generate Xbox gamertag ideas" },
+            { title: "Xbox Gamertag Availability Checker", desc: "Check whether an Xbox gamertag may be available or already taken.", href: "/xbox-gamertag-availability-checker", anchor: "check Xbox gamertag availability" },
+            { title: "Xbox Gamercard Generator", desc: "Create a custom Xbox-style profile card with your gamertag, avatar, and Gamerscore.", href: "/gamercard-generator", anchor: "create a custom Xbox gamercard" },
+            { title: "Xbox Gamertag Price Checker", desc: "Estimate whether a gamertag may be rare, short, or potentially valuable.", href: "/gamertag-price-checker", anchor: "estimate your Xbox gamertag value" },
+            { title: "Xbox Gamertag Optimizer", desc: "Shorten, clean, and rewrite weak or messy Xbox gamertags into better options.", href: "/gamertag-optimizer", anchor: "optimize your Xbox gamertag" },
+          ].map((tool) => (
+            <div class="bg-white rounded-xl p-6 hover:shadow-xl transition-shadow duration-200 group flex flex-col h-full">
+              <h3 class="text-lg font-semibold mb-2 text-[#1F2937] group-hover:text-brand transition-colors font-ui leading-snug">{tool.title}</h3>
+              <p class="text-[#4B5563] mb-4 font-ui leading-7 text-sm flex-1">{tool.desc}</p>
+              <a href={tool.href} class="inline-block bg-brand hover:bg-brand-light text-white px-4 py-2 rounded transition-colors font-ui text-center text-sm whitespace-nowrap">
+                {tool.anchor}
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ── -->
+   <section class="bg-gray-50 py-10 md:py-16">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10">
+          <div class="inline-flex items-center mb-4" style="background: hsl(107 76% 26% / 0.08); border: 1px solid hsl(107 76% 26% / 0.25); border-radius: 3px; padding: 3px 12px;">
+            <span style="font-family:'Inter',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color: hsl(107 76% 26%);">FAQ</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="font-family:'Inter',sans-serif; color: hsl(218 30% 9%); letter-spacing: -0.02em;">
+            Xbox Gamertag Search FAQ
+          </h2>
+          <p class="text-sm max-w-2xl mx-auto" style="font-family:'Inter',sans-serif; color: hsl(215 16% 47%); line-height: 1.6;">
+            Common questions about looking up Xbox profiles and gamertags.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-3" id="faq-list-search">
+          {faqItems.map((item) => (
+            <div class="faq-item-search w-full overflow-hidden rounded-lg" style="background: #ffffff; border: 1px solid hsl(220 13% 91%); box-shadow: 0 2px 8px hsl(218 30% 9% / 0.06); transition: border-color 0.2s ease, box-shadow 0.2s ease;">
+              <button
+                class="faq-toggle-search w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5"
+                type="button"
+                aria-expanded="false"
+                style="background: transparent; border: none; cursor: pointer; outline: none; touch-action: manipulation;"
+              >
+                <span class="text-sm sm:text-base font-semibold flex-1" style="font-family:'Inter',sans-serif; color: hsl(218 20% 16%); line-height: 1.4;">
+                  {item.question}
+                </span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: hsl(107 76% 26%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0;">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <div class="faq-content-search" style="max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);">
+                <div class="mx-5 sm:mx-6" style="height:1px; background: hsl(220 13% 91%);"></div>
+                <div class="px-5 sm:px-6 py-4 sm:py-5">
+                  <p class="text-sm leading-relaxed" style="font-family:'Inter',sans-serif; color: hsl(215 16% 47%); line-height: 1.75;">{item.answer}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+
   </div>
 </MainLayout>
 
+<style>
+  .faq-item-search:hover {
+    border-color: hsl(107 76% 26% / 0.3) !important;
+    box-shadow: 0 4px 16px hsl(218 30% 9% / 0.1) !important;
+  }
+  .faq-item-search.is-open {
+    border-color: hsl(107 76% 26% / 0.4) !important;
+    box-shadow: 0 4px 20px hsl(218 30% 9% / 0.1) !important;
+  }
+  .faq-item-search.is-open .faq-toggle-search span {
+    color: hsl(107 76% 26%) !important;
+  }
+  .faq-item-search.is-open .faq-toggle-search svg {
+    transform: rotate(180deg);
+  }
+  .faq-toggle-search:hover {
+    background-color: hsl(220 13% 97%) !important;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-content-search { transition: none !important; }
+  }
+</style>
+
 <script>
 const API_BASE = import.meta.env.PUBLIC_API_BASE_URL || 'https://api.xboxgamertaggenerator.com';
- function normalizeXboxImageUrl(url) {
-    if (!url) return null;
 
-    try {
-      const parsed = new URL(url);
-      parsed.searchParams.delete('mode');
-      parsed.searchParams.delete('background');
-      return parsed.toString();
-    } catch {
-      return url
-        .replace(/([?&])mode=Padding(&|$)/gi, '$1')
-        .replace(/([?&])background=0x[0-9a-f]+(&|$)/gi, '$1')
-        .replace(/[?&]$/, '');
-    }
+function normalizeXboxImageUrl(url) {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    parsed.searchParams.delete('mode');
+    parsed.searchParams.delete('background');
+    return parsed.toString();
+  } catch {
+    return url
+      .replace(/([?&])mode=Padding(&|$)/gi, '$1')
+      .replace(/([?&])background=0x[0-9a-f]+(&|$)/gi, '$1')
+      .replace(/[?&]$/, '');
   }
+}
 
-  const fallbackImage = '/images/default-avatar.svg';
+const fallbackImage = '/images/default-avatar.svg';
 
-  const input       = document.getElementById('profile-input') as HTMLInputElement;
-  const btn         = document.getElementById('search-btn') as HTMLButtonElement;
-  const loadingEl   = document.getElementById('loading')!;
-  const errorEl     = document.getElementById('error')!;
-  const errorMsg    = document.getElementById('error-msg')!;
-  const profileCard = document.getElementById('profile-card')!;
+const input       = document.getElementById('profile-input') as HTMLInputElement;
+const btn         = document.getElementById('search-btn') as HTMLButtonElement;
+const loadingEl   = document.getElementById('loading')!;
+const errorEl     = document.getElementById('error')!;
+const errorMsg    = document.getElementById('error-msg')!;
+const profileCard = document.getElementById('profile-card')!;
 const showMoreHistoryBtn = document.getElementById('show-more-history-btn') as HTMLButtonElement | null;
 const gameHistoryActions = document.getElementById('game-history-actions')!;
 
@@ -212,97 +439,84 @@ let currentGamertag = '';
 let currentHistoryLimit = 9;
 const historyStep = 9;
 let lastLoadedHistoryCount = 0;
-  function fmt(n: number) {
-    return n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n);
-  }
 
-  function escHtml(str: string) {
-    return (str ?? '').replace(/[&<>"']/g, c =>
-      ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]!));
-  }
-
-  function formatDate(value: string | null | undefined) {
-    if (!value) return '—';
-
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return value;
-
-    return date.toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  }
-
-  function formatPercent(value: unknown) {
-    const num = Number(value ?? 0);
-    if (!Number.isFinite(num)) return '0%';
-    return `${num.toFixed(1)}%`;
-  }
-
-  function showError(msg: string) {
-    profileCard.classList.add('hidden');
-    errorEl.classList.remove('hidden');
-    errorMsg.textContent = msg;
-  }
-
-  function statCard(label: string, value: string, highlight = false) {
-    return `
-      <div class="text-center p-3 rounded-lg bg-[#F8FAFC] border border-[#E5E7EB]">
-        <p class="${highlight ? 'text-brand font-extrabold' : 'text-[#111827]'} font-bold text-xl">${escHtml(value)}</p>
-        <p class="text-[10px] font-bold tracking-[0.16em] uppercase text-[#9CA3AF] mt-1">${escHtml(label)}</p>
-      </div>
-    `;
-  }
-
-  function badge(text: string, variant: 'brand' | 'muted' = 'muted') {
-    if (variant === 'brand') {
-      return `<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-[#00D02B]/10 text-[#00B324] border border-[#00D02B]/20">${escHtml(text)}</span>`;
-    }
-
-    return `<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-[#F3F4F6] text-[#6B7280] border border-[#E5E7EB]">${escHtml(text)}</span>`;
-  }
-
-  function resetProfileUI() {
-    const avatar = document.getElementById('profile-avatar') as HTMLImageElement;
-    const bioEl = document.getElementById('profile-bio')!;
-    const metaEl = document.getElementById('profile-meta')!;
-    const badgesEl = document.getElementById('profile-badges')!;
-    const statsGrid = document.getElementById('profile-stats-grid')!;
-    const statsDivider = document.getElementById('stats-divider')!;
-    const historyDivider = document.getElementById('history-divider')!;
-    const historySection = document.getElementById('game-history-section')!;
-    const historyList = document.getElementById('game-history-list')!;
-
-    avatar.src = '';
-    avatar.alt = 'Avatar';
-
-    (document.getElementById('profile-gamertag')!).textContent = '';
-
-    bioEl.textContent = '';
-    bioEl.classList.add('hidden');
-
-    metaEl.innerHTML = '';
-    metaEl.classList.add('hidden');
-
-    badgesEl.innerHTML = '';
-    badgesEl.classList.add('hidden');
-
-    statsGrid.innerHTML = '';
-    statsGrid.classList.add('hidden');
-
-    statsDivider.classList.add('hidden');
-
-    historyList.innerHTML = '';
-    historySection.classList.add('hidden');
-    historyDivider.classList.add('hidden');
-    gameHistoryActions.classList.add('hidden');
-
-if (showMoreHistoryBtn) {
-  showMoreHistoryBtn.disabled = false;
-  showMoreHistoryBtn.textContent = 'Show More';
+function fmt(n: number) {
+  return n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n);
 }
+
+function escHtml(str: string) {
+  return (str ?? '').replace(/[&<>"']/g, c =>
+    ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]!));
+}
+
+function formatDate(value: string | null | undefined) {
+  if (!value) return '—';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function formatPercent(value: unknown) {
+  const num = Number(value ?? 0);
+  if (!Number.isFinite(num)) return '0%';
+  return `${num.toFixed(1)}%`;
+}
+
+function showError(msg: string) {
+  profileCard.classList.add('hidden');
+  errorEl.classList.remove('hidden');
+  errorMsg.textContent = msg;
+}
+
+function statCard(label: string, value: string, highlight = false) {
+  return `
+    <div class="text-center p-3 rounded-lg bg-[#F8FAFC] border border-[#E5E7EB]">
+      <p class="${highlight ? 'text-brand font-extrabold' : 'text-[#111827]'} font-bold text-xl">${escHtml(value)}</p>
+      <p class="text-[10px] font-bold tracking-[0.16em] uppercase text-[#9CA3AF] mt-1">${escHtml(label)}</p>
+    </div>
+  `;
+}
+
+function badge(text: string, variant: 'brand' | 'muted' = 'muted') {
+  if (variant === 'brand') {
+    return `<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-[#00D02B]/10 text-[#00B324] border border-[#00D02B]/20">${escHtml(text)}</span>`;
   }
+  return `<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-[#F3F4F6] text-[#6B7280] border border-[#E5E7EB]">${escHtml(text)}</span>`;
+}
+
+function resetProfileUI() {
+  const avatar = document.getElementById('profile-avatar') as HTMLImageElement;
+  const bioEl = document.getElementById('profile-bio')!;
+  const metaEl = document.getElementById('profile-meta')!;
+  const badgesEl = document.getElementById('profile-badges')!;
+  const statsGrid = document.getElementById('profile-stats-grid')!;
+  const statsDivider = document.getElementById('stats-divider')!;
+  const historyDivider = document.getElementById('history-divider')!;
+  const historySection = document.getElementById('game-history-section')!;
+  const historyList = document.getElementById('game-history-list')!;
+
+  avatar.src = '';
+  avatar.alt = 'Avatar';
+  (document.getElementById('profile-gamertag')!).textContent = '';
+  bioEl.textContent = '';
+  bioEl.classList.add('hidden');
+  metaEl.innerHTML = '';
+  metaEl.classList.add('hidden');
+  badgesEl.innerHTML = '';
+  badgesEl.classList.add('hidden');
+  statsGrid.innerHTML = '';
+  statsGrid.classList.add('hidden');
+  statsDivider.classList.add('hidden');
+  historyList.innerHTML = '';
+  historySection.classList.add('hidden');
+  historyDivider.classList.add('hidden');
+  gameHistoryActions.classList.add('hidden');
+
+  if (showMoreHistoryBtn) {
+    showMoreHistoryBtn.disabled = false;
+    showMoreHistoryBtn.textContent = 'Show More';
+  }
+}
 
 function gameHistoryCard(game: Record<string, any>) {
   const name = game.name || 'Unknown Game';
@@ -318,41 +532,16 @@ function gameHistoryCard(game: Record<string, any>) {
   return `
     <div class="rounded-xl border border-[#E5E7EB] bg-[#F8FAFC] p-4 h-full flex flex-col">
       <div class="overflow-hidden rounded-lg border border-[#E5E7EB] bg-white">
-        ${
-          image
-            ? `
-              <img
-                src="${escHtml(image)}"
-                alt="${escHtml(name)}"
-                class="w-full h-40 object-cover"
-                onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling?.classList.remove('hidden');"
-              />
-              <div class="hidden h-40 items-center justify-center text-xs text-[#9CA3AF] font-semibold">
-                No Image
-              </div>
-            `
-            : `
-              <div class="h-40 flex items-center justify-center text-xs text-[#9CA3AF] font-semibold">
-                No Image
-              </div>
-            `
+        ${image
+          ? `<img src="${escHtml(image)}" alt="${escHtml(name)}" class="w-full h-40 object-cover" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling?.classList.remove('hidden');"/>
+             <div class="hidden h-40 items-center justify-center text-xs text-[#9CA3AF] font-semibold">No Image</div>`
+          : `<div class="h-40 flex items-center justify-center text-xs text-[#9CA3AF] font-semibold">No Image</div>`
         }
       </div>
-
       <div class="mt-4 flex-1 flex flex-col">
         <h4 class="text-lg font-bold text-[#111827] leading-tight break-words">${escHtml(name)}</h4>
         <p class="text-sm text-[#6B7280] mt-2">Last played ${escHtml(lastPlayed)}</p>
-
-        ${
-          platforms.length
-            ? `
-              <div class="flex flex-wrap gap-2 mt-3">
-                ${platforms.map((platform: string) => badge(platform)).join('')}
-              </div>
-            `
-            : ''
-        }
-
+        ${platforms.length ? `<div class="flex flex-wrap gap-2 mt-3">${platforms.map((p: string) => badge(p)).join('')}</div>` : ''}
         <div class="mt-4">
           <div class="flex items-center justify-between text-[11px] font-bold tracking-[0.16em] uppercase text-[#9CA3AF] mb-2">
             <span>Completion</span>
@@ -362,18 +551,15 @@ function gameHistoryCard(game: Record<string, any>) {
             <div class="h-full bg-brand rounded-full" style="width: ${completion}%"></div>
           </div>
         </div>
-
         <div class="grid grid-cols-3 gap-2 mt-4">
           <div class="rounded-lg border border-[#E5E7EB] bg-white p-3 text-center">
             <p class="text-[10px] font-bold tracking-[0.14em] uppercase text-[#9CA3AF]">GS</p>
             <p class="text-[#111827] font-extrabold text-sm mt-1">${escHtml(String(currentGs))}/${escHtml(String(totalGs))}</p>
           </div>
-
           <div class="rounded-lg border border-[#E5E7EB] bg-white p-3 text-center">
             <p class="text-[10px] font-bold tracking-[0.14em] uppercase text-[#9CA3AF]">Unlocked</p>
             <p class="text-[#111827] font-extrabold text-sm mt-1">${escHtml(String(unlockedAchievements))}</p>
           </div>
-
           <div class="rounded-lg border border-[#E5E7EB] bg-white p-3 text-center">
             <p class="text-[10px] font-bold tracking-[0.14em] uppercase text-[#9CA3AF]">Total</p>
             <p class="text-[#111827] font-extrabold text-sm mt-1">${escHtml(String(totalAchievements))}</p>
@@ -383,6 +569,7 @@ function gameHistoryCard(game: Record<string, any>) {
     </div>
   `;
 }
+
 function populateGameHistory(history: any[]) {
   const historySection = document.getElementById('game-history-section')!;
   const historyDivider = document.getElementById('history-divider')!;
@@ -391,11 +578,7 @@ function populateGameHistory(history: any[]) {
   lastLoadedHistoryCount = Array.isArray(history) ? history.length : 0;
 
   if (!Array.isArray(history) || !history.length) {
-    historyList.innerHTML = `
-      <div class="col-span-full rounded-xl border border-[#E5E7EB] bg-[#F8FAFC] p-5 text-sm text-[#6B7280]">
-        No recent game history was returned for this profile.
-      </div>
-    `;
+    historyList.innerHTML = `<div class="col-span-full rounded-xl border border-[#E5E7EB] bg-[#F8FAFC] p-5 text-sm text-[#6B7280]">No recent game history was returned for this profile.</div>`;
     historySection.classList.remove('hidden');
     historyDivider.classList.remove('hidden');
     gameHistoryActions.classList.add('hidden');
@@ -412,110 +595,58 @@ function populateGameHistory(history: any[]) {
     gameHistoryActions.classList.add('hidden');
   }
 }
-  function populateProfile(p: Record<string, any>, history: any[] = []) {
-    resetProfileUI();
 
-    const avatar = document.getElementById('profile-avatar') as HTMLImageElement;
-    const bioEl = document.getElementById('profile-bio')!;
-    const metaEl = document.getElementById('profile-meta')!;
-    const badgesEl = document.getElementById('profile-badges')!;
-    const statsGrid = document.getElementById('profile-stats-grid')!;
-    const divider = document.getElementById('stats-divider')!;
+function populateProfile(p: Record<string, any>, history: any[] = []) {
+  resetProfileUI();
 
-   avatar.src = p.displayPicRaw || p.avatar || fallbackImage;
-avatar.onerror = () => {
-  avatar.onerror = null;
-  avatar.src = fallbackImage;
-};
-    avatar.alt = p.gamertag ?? 'Avatar';
+  const avatar = document.getElementById('profile-avatar') as HTMLImageElement;
+  const bioEl = document.getElementById('profile-bio')!;
+  const metaEl = document.getElementById('profile-meta')!;
+  const badgesEl = document.getElementById('profile-badges')!;
+  const statsGrid = document.getElementById('profile-stats-grid')!;
+  const divider = document.getElementById('stats-divider')!;
 
-    (document.getElementById('profile-gamertag')!).textContent = p.gamertag ?? '—';
+  avatar.src = p.displayPicRaw || p.avatar || fallbackImage;
+  avatar.onerror = () => { avatar.onerror = null; avatar.src = fallbackImage; };
+  avatar.alt = p.gamertag ?? 'Avatar';
+  (document.getElementById('profile-gamertag')!).textContent = p.gamertag ?? '—';
 
-    if (p.bio) {
-      bioEl.textContent = p.bio;
-      bioEl.classList.remove('hidden');
-    }
+  if (p.bio) { bioEl.textContent = p.bio; bioEl.classList.remove('hidden'); }
 
-    const metaParts: string[] = [];
+  const metaParts: string[] = [];
+  if (p.real_name) metaParts.push(`<span class="text-[10px] font-bold tracking-[0.16em] uppercase text-[#9CA3AF] flex items-center gap-1">${escHtml(p.real_name)}</span>`);
+  if (p.location) metaParts.push(`<span class="text-[10px] font-bold tracking-[0.16em] uppercase text-[#9CA3AF] flex items-center gap-1">📍 ${escHtml(p.location)}</span>`);
+  if (metaParts.length) { metaEl.innerHTML = metaParts.join(''); metaEl.classList.remove('hidden'); }
 
-    if (p.real_name) {
-      metaParts.push(
-        `<span class="text-[10px] font-bold tracking-[0.16em] uppercase text-[#9CA3AF] flex items-center gap-1">${escHtml(p.real_name)}</span>`
-      );
-    }
+  const badges: string[] = [];
+  if (p.account_tier) badges.push(badge(String(p.account_tier), 'brand'));
+  if (p.reputation) badges.push(badge(String(p.reputation)));
+  if (p.verified === true) badges.push(badge('Verified', 'brand'));
+  if (p.has_game_pass === true) badges.push(badge('Game Pass', 'brand'));
+  if (badges.length) { badgesEl.innerHTML = badges.join(''); badgesEl.classList.remove('hidden'); }
 
-    if (p.location) {
-      metaParts.push(
-        `<span class="text-[10px] font-bold tracking-[0.16em] uppercase text-[#9CA3AF] flex items-center gap-1">📍 ${escHtml(p.location)}</span>`
-      );
-    }
+  const stats: string[] = [];
+  stats.push(statCard('Gamerscore', fmt(Number(p.gamerscore ?? 0)), true));
+  if (typeof p.followers !== 'undefined') stats.push(statCard('Followers', fmt(Number(p.followers))));
+  if (typeof p.following !== 'undefined') stats.push(statCard('Following', fmt(Number(p.following))));
+  if (stats.length) { statsGrid.innerHTML = stats.join(''); statsGrid.classList.remove('hidden'); divider.classList.remove('hidden'); }
 
-    if (metaParts.length) {
-      metaEl.innerHTML = metaParts.join('');
-      metaEl.classList.remove('hidden');
-    }
+  populateGameHistory(history);
+}
 
-    const badges: string[] = [];
-
-    if (p.account_tier) {
-      badges.push(badge(String(p.account_tier), 'brand'));
-    }
-
-    if (p.reputation) {
-      badges.push(badge(String(p.reputation)));
-    }
-
-    if (p.verified === true) {
-      badges.push(badge('Verified', 'brand'));
-    }
-
-    if (p.has_game_pass === true) {
-      badges.push(badge('Game Pass', 'brand'));
-    }
-
-    if (badges.length) {
-      badgesEl.innerHTML = badges.join('');
-      badgesEl.classList.remove('hidden');
-    }
-
-    const stats: string[] = [];
-
-    stats.push(statCard('Gamerscore', fmt(Number(p.gamerscore ?? 0)), true));
-
-    if (typeof p.followers !== 'undefined') {
-      stats.push(statCard('Followers', fmt(Number(p.followers))));
-    }
-
-    if (typeof p.following !== 'undefined') {
-      stats.push(statCard('Following', fmt(Number(p.following))));
-    }
-
-    if (stats.length) {
-      statsGrid.innerHTML = stats.join('');
-      statsGrid.classList.remove('hidden');
-      divider.classList.remove('hidden');
-    }
-
-    populateGameHistory(history);
-  }
 async function lookupProfile(customLimit?: number, preserveVisibleCard = false) {
   const tag = input.value.trim();
   if (!tag) return;
 
   const limit = customLimit ?? currentHistoryLimit;
 
-  if (!preserveVisibleCard) {
-    profileCard.classList.add('hidden');
-  }
+  if (!preserveVisibleCard) profileCard.classList.add('hidden');
 
   errorEl.classList.add('hidden');
   loadingEl.classList.remove('hidden');
   btn.disabled = true;
 
-  if (showMoreHistoryBtn) {
-    showMoreHistoryBtn.disabled = true;
-    showMoreHistoryBtn.textContent = 'Loading...';
-  }
+  if (showMoreHistoryBtn) { showMoreHistoryBtn.disabled = true; showMoreHistoryBtn.textContent = 'Loading...'; }
 
   try {
     const res = await fetch(
@@ -525,48 +656,17 @@ async function lookupProfile(customLimit?: number, preserveVisibleCard = false) 
 
     const raw = await res.text();
     let data: any = {};
+    try { data = raw ? JSON.parse(raw) : {}; } catch { throw new Error('Invalid server response.'); }
 
-    try {
-      data = raw ? JSON.parse(raw) : {};
-    } catch {
-      throw new Error('Invalid server response.');
-    }
+    if (data.error) { showError(data.message ?? 'Something went wrong.'); return; }
+    if (data.found === false) { showError(data.message ?? 'Gamertag not found.'); return; }
+    if (!data.profile) { showError('Profile data is missing.'); return; }
 
-    if (data.error) {
-      showError(data.message ?? 'Something went wrong.');
-      return;
-    }
-
-    if (data.found === false) {
-      showError(data.message ?? 'Gamertag not found.');
-      return;
-    }
-
-    if (!data.profile) {
-      showError('Profile data is missing.');
-      return;
-    }
-
-    const fallbackImage = '/images/default-avatar.svg';
-
-    const profileImage =
-      normalizeXboxImageUrl(data.profile?.displayPicRaw || data.profile?.gameDisplayPicRaw) ||
-      fallbackImage;
-
+    const profileImage = normalizeXboxImageUrl(data.profile?.displayPicRaw || data.profile?.gameDisplayPicRaw) || fallbackImage;
     data.profile.displayPicRaw = profileImage;
 
-    const historySource =
-      data.game_history ??
-      data.history ??
-      data.profile?.game_history ??
-      data.gameHistory ??
-      [];
-
-    const history = Array.isArray(historySource)
-      ? historySource
-      : Array.isArray(historySource?.items)
-        ? historySource.items
-        : [];
+    const historySource = data.game_history ?? data.history ?? data.profile?.game_history ?? data.gameHistory ?? [];
+    const history = Array.isArray(historySource) ? historySource : Array.isArray(historySource?.items) ? historySource.items : [];
 
     console.log('Profile API response:', data);
     console.log('Resolved game history:', history);
@@ -581,38 +681,48 @@ async function lookupProfile(customLimit?: number, preserveVisibleCard = false) 
   } finally {
     loadingEl.classList.add('hidden');
     btn.disabled = false;
-
-    if (showMoreHistoryBtn) {
-      showMoreHistoryBtn.disabled = false;
-      showMoreHistoryBtn.textContent = 'Show More';
-    }
+    if (showMoreHistoryBtn) { showMoreHistoryBtn.disabled = false; showMoreHistoryBtn.textContent = 'Show More'; }
   }
 }
 
-  async function showMoreHistory() {
+async function showMoreHistory() {
   if (!currentGamertag) return;
-
   const previousCount = lastLoadedHistoryCount;
   currentHistoryLimit += historyStep;
-
   await lookupProfile(currentHistoryLimit, true);
-
-  if (lastLoadedHistoryCount <= previousCount) {
-    gameHistoryActions.classList.add('hidden');
-  }
+  if (lastLoadedHistoryCount <= previousCount) gameHistoryActions.classList.add('hidden');
 }
 
- btn.addEventListener('click', () => {
-  currentHistoryLimit = 9;
-  lookupProfile(currentHistoryLimit);
-});
-
-input.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    currentHistoryLimit = 9;
-    lookupProfile(currentHistoryLimit);
-  }
-});
-
+btn.addEventListener('click', () => { currentHistoryLimit = 9; lookupProfile(currentHistoryLimit); });
+input.addEventListener('keydown', e => { if (e.key === 'Enter') { currentHistoryLimit = 9; lookupProfile(currentHistoryLimit); } });
 showMoreHistoryBtn?.addEventListener('click', showMoreHistory);
+
+// FAQ accordion
+function initFaqSearch() {
+  document.querySelectorAll('.faq-toggle-search').forEach(function(btn) {
+    if ((btn as HTMLElement).dataset.bound === 'true') return;
+    (btn as HTMLElement).dataset.bound = 'true';
+    btn.addEventListener('click', function() {
+      const item = (btn as HTMLElement).closest('.faq-item-search');
+      const content = item ? item.querySelector('.faq-content-search') as HTMLElement : null;
+      if (!item || !content) return;
+      const isOpen = item.classList.contains('is-open');
+      document.querySelectorAll('.faq-item-search').forEach(function(el) {
+        el.classList.remove('is-open');
+        const c = el.querySelector('.faq-content-search') as HTMLElement;
+        if (c) c.style.maxHeight = '0';
+        const t = el.querySelector('.faq-toggle-search') as HTMLElement;
+        if (t) t.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('is-open');
+        content.style.maxHeight = content.scrollHeight + 'px';
+        (btn as HTMLElement).setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+}
+
+initFaqSearch();
+document.addEventListener('astro:page-load', initFaqSearch);
 </script>

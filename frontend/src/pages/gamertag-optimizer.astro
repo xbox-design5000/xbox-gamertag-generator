@@ -5,12 +5,35 @@ import Header from "../components/layout/Header.astro";
 const apiBase = (import.meta.env.PUBLIC_API_URL ?? "http://127.0.0.1:8000").replace(/\/$/, "");
 const pageUrl = "https://xboxgamertaggenerator.com/gamertag-optimizer";
 
+const faqItems = [
+  {
+    question: "What does the Xbox Gamertag Optimizer do?",
+    answer: "It analyzes your current gamertag for readability, length, and formatting quality. If it finds room for improvement it gives you cleaner, shorter, and better-formatted alternatives."
+  },
+  {
+    question: "What is the difference between the optimizer and the generator?",
+    answer: "The generator creates new gamertag ideas from scratch. The optimizer takes a name you already have and makes it better. Use the generator when you have no name yet. Use the optimizer when you want to clean up an existing name."
+  },
+  {
+    question: "What makes a gamertag hard to read?",
+    answer: "Random number strings, the xX pattern, excessive underscores, number-for-letter substitutions, and names over 10 characters all make gamertags harder to read quickly in lobbies and on leaderboards."
+  },
+  {
+    question: "Will the optimizer always give me suggestions?",
+    answer: "No. If your gamertag already looks clean and readable, the tool will confirm it rather than forcing suggestions. The optimizer only recommends changes when there is a real improvement to be made."
+  },
+  {
+    question: "How many suggestions will I get?",
+    answer: "The optimizer provides up to three types of suggestions — a shortened version, a rewritten alternative, and a cleaned-up format. The number of suggestions depends on how much improvement your current name needs."
+  }
+];
+
 const schema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Gamertag Optimizer",
+  "name": "Xbox Gamertag Optimizer",
   "url": pageUrl,
-  "description": "Shorten, clean, and rewrite Xbox gamertags instantly with this free Gamertag Optimizer tool.",
+  "description": "Clean up and improve your Xbox gamertag instantly. The Xbox Gamertag Optimizer rewrites weak or messy names into better Xbox-ready options — free, no sign-up needed.",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Web",
   "inLanguage": "en-US",
@@ -30,18 +53,33 @@ const schema = {
     "target": pageUrl
   }
 };
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map((item) => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
 ---
 
 <MainLayout
-  title="Gamertag Optimizer – Shorten, Clean & Rewrite Xbox Gamertags"
-  description="Use our free Gamertag Optimizer to shorten long names, clean messy Xbox tags, and rewrite weak ideas into better, more readable gamertags."
+  title="Xbox Gamertag Optimizer — Fix and Improve Your Xbox Gamertag"
+  description="Clean up and improve your Xbox gamertag instantly. The Xbox Gamertag Optimizer rewrites weak or messy names into better Xbox-ready options — free, no sign-up needed."
   canonical={pageUrl}
   {schema}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <Header />
 
   <div class="min-h-screen bg-[#F3F4F6] font-ui text-[#111827]">
-    <!-- Hero -->
+
+    <!-- ── Hero ── -->
     <section class="section-dark-alt py-8">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div class="bg-card border border-default rounded-xl py-14 md:py-16 px-6 md:px-10 text-center shadow-card relative overflow-hidden">
@@ -53,32 +91,21 @@ const schema = {
             </div>
 
             <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground mb-4 leading-tight">
-              Gamertag <span class="text-brand">Optimizer</span> Tool
+              Xbox Gamertag <span class="text-brand">Optimizer</span>
             </h1>
 
-            <p class="text-base md:text-lg text-foreground-muted max-w-2xl mx-auto leading-relaxed">
-              Shorten, rewrite, and clean your Xbox gamertag instantly.
+            <p class="text-foreground-muted text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+              The Xbox Gamertag Optimizer checks your existing gamertag and tells you whether it looks clean and readable. If there is room for improvement, it gives you shorter, cleaner, and better-formatted alternatives — all Xbox-ready.
             </p>
-
-            <div class="mt-6 flex flex-wrap justify-center gap-2 text-xs md:text-sm">
-              <span class="inline-flex items-center px-3 py-1 bg-brand-dim border border-green rounded-sm text-foreground-muted">
-                Free Tool
-              </span>
-              <span class="inline-flex items-center px-3 py-1 bg-brand-dim border border-green rounded-sm text-foreground-muted">
-                Instant Results
-              </span>
-              <span class="inline-flex items-center px-3 py-1 bg-brand-dim border border-green rounded-sm text-foreground-muted">
-                Smart Suggestions
-              </span>
-            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Tool -->
+    <!-- ── Tool ── -->
     <section class="section-white-subtle py-10">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-5">
+
         <!-- Input Card -->
         <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 md:p-7 shadow-lg">
           <form id="optimizerForm" data-api-base={apiBase} class="space-y-5">
@@ -86,7 +113,6 @@ const schema = {
               <label for="gamertagInput" class="text-xs font-bold tracking-[0.18em] uppercase text-[#6B7280] block mb-3">
                 Enter your Xbox Gamertag
               </label>
-
               <div class="flex flex-col sm:flex-row gap-3">
                 <input
                   id="gamertagInput"
@@ -102,7 +128,7 @@ const schema = {
                   type="submit"
                   class="px-6 py-3 bg-brand hover:bg-brand-light text-white font-semibold text-sm uppercase tracking-[0.14em] rounded-lg transition-colors duration-200 whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  Optimize Gamertag
+                  Optimize
                 </button>
               </div>
             </div>
@@ -110,30 +136,17 @@ const schema = {
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <label class="flex items-center justify-between bg-[#F8FAFC] border border-[#E5E7EB] rounded-lg px-4 py-3">
                 <span class="text-sm font-semibold text-[#111827]">Keep Numbers</span>
-                <input
-                  id="keepNumbers"
-                  type="checkbox"
-                  name="keep_numbers"
-                  class="h-4 w-4 accent-[#00D02B]"
-                />
+                <input id="keepNumbers" type="checkbox" name="keep_numbers" class="h-4 w-4 accent-[#00D02B]" />
               </label>
-
               <label class="flex items-center justify-between bg-[#F8FAFC] border border-[#E5E7EB] rounded-lg px-4 py-3">
                 <span class="text-sm font-semibold text-[#111827]">Keep Meaning</span>
-                <input
-                  id="keepMeaning"
-                  type="checkbox"
-                  name="keep_meaning"
-                  checked
-                  class="h-4 w-4 accent-[#00D02B]"
-                />
+                <input id="keepMeaning" type="checkbox" name="keep_meaning" checked class="h-4 w-4 accent-[#00D02B]" />
               </label>
             </div>
 
             <p class="text-xs text-[#9CA3AF] mt-2">
               Cleaner removes messy formatting · Rewriter gives stronger alternatives.
             </p>
-
             <p class="text-xs text-[#9CA3AF] mt-1 leading-relaxed">
               Tip: If your gamertag is already clean and readable, this tool will say so instead of forcing many suggestions.
             </p>
@@ -149,10 +162,7 @@ const schema = {
 
         <!-- Loading -->
         <div id="loadingState" class="hidden text-center py-12">
-          <div
-            class="inline-block w-8 h-8 rounded-full animate-spin mb-4"
-            style="border: 2px solid #E5E7EB; border-top-color: #00D02B;"
-          ></div>
+          <div class="inline-block w-8 h-8 rounded-full animate-spin mb-4" style="border: 2px solid #E5E7EB; border-top-color: #00D02B;"></div>
           <p class="text-sm text-[#6B7280] tracking-wide">Checking your gamertag...</p>
         </div>
 
@@ -163,116 +173,78 @@ const schema = {
 
         <!-- Results -->
         <div id="results" class="hidden space-y-4">
+
           <!-- Status Card -->
           <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-lg text-center">
-            <p class="text-xs font-bold tracking-[0.16em] uppercase text-[#9CA3AF] mb-2">
-              Checked Gamertag
-            </p>
-
+            <p class="text-xs font-bold tracking-[0.16em] uppercase text-[#9CA3AF] mb-2">Checked Gamertag</p>
             <h2 id="normalizedTag" class="text-3xl md:text-4xl font-extrabold text-[#111827] mb-4"></h2>
-
             <div id="qualityBadgeWrap" class="mb-4 hidden">
-              <span
-                id="qualityBadge"
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
-              ></span>
+              <span id="qualityBadge" class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"></span>
             </div>
-
             <p id="optimizerMessage" class="text-sm text-[#6B7280] leading-relaxed max-w-2xl mx-auto"></p>
-
             <div id="issuesWrap" class="hidden mt-5 text-left max-w-xl mx-auto">
-              <p class="text-xs font-bold tracking-[0.16em] uppercase text-[#6B7280] mb-3">
-                What can be improved
-              </p>
+              <p class="text-xs font-bold tracking-[0.16em] uppercase text-[#6B7280] mb-3">What can be improved</p>
               <div id="issuesList" class="space-y-2"></div>
             </div>
           </div>
 
           <!-- Suggestions Wrap -->
           <div id="suggestionsWrap" class="space-y-4">
+
             <!-- Shortened -->
             <div id="shortenedSection" class="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-lg hidden">
               <div class="mb-5">
-                <span class="inline-flex items-center px-2.5 py-1 bg-[#00D02B]/10 border border-[#00D02B]/20 rounded-sm text-[10px] font-bold tracking-[0.16em] uppercase text-[#00B324] mb-3">
-                  Short
-                </span>
-                <h3 class="text-xl md:text-2xl font-extrabold text-[#111827]">
-                  Shortened Versions
-                </h3>
-                <p class="text-sm text-[#6B7280] mt-1">
-                  Shorter gamertags that keep the strongest part of your name.
-                </p>
+                <span class="inline-flex items-center px-2.5 py-1 bg-[#00D02B]/10 border border-[#00D02B]/20 rounded-sm text-[10px] font-bold tracking-[0.16em] uppercase text-[#00B324] mb-3">Short</span>
+                <h3 class="text-xl md:text-2xl font-extrabold text-[#111827]">Shortened Versions</h3>
+                <p class="text-sm text-[#6B7280] mt-1">Shorter gamertags that keep the strongest part of your name.</p>
               </div>
-
               <div id="shortenedList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
             </div>
 
             <!-- Rewritten -->
             <div id="rewrittenSection" class="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-lg hidden">
               <div class="mb-5">
-                <span class="inline-flex items-center px-2.5 py-1 bg-[#00D02B]/10 border border-[#00D02B]/20 rounded-sm text-[10px] font-bold tracking-[0.16em] uppercase text-[#00B324] mb-3">
-                  Rewritten
-                </span>
-                <h3 class="text-xl md:text-2xl font-extrabold text-[#111827]">
-                  Rewritten Versions
-                </h3>
-                <p class="text-sm text-[#6B7280] mt-1">
-                  Alternative names with the same feel, but cleaner or more stylish wording.
-                </p>
+                <span class="inline-flex items-center px-2.5 py-1 bg-[#00D02B]/10 border border-[#00D02B]/20 rounded-sm text-[10px] font-bold tracking-[0.16em] uppercase text-[#00B324] mb-3">Rewritten</span>
+                <h3 class="text-xl md:text-2xl font-extrabold text-[#111827]">Rewritten Versions</h3>
+                <p class="text-sm text-[#6B7280] mt-1">Alternative names with the same feel, but cleaner or more stylish wording.</p>
               </div>
-
               <div id="rewrittenList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
             </div>
 
             <!-- Cleaned -->
             <div id="cleanedSection" class="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-lg hidden">
               <div class="mb-5">
-                <span class="inline-flex items-center px-2.5 py-1 bg-[#00D02B]/10 border border-[#00D02B]/20 rounded-sm text-[10px] font-bold tracking-[0.16em] uppercase text-[#00B324] mb-3">
-                  Clean
-                </span>
-                <h3 class="text-xl md:text-2xl font-extrabold text-[#111827]">
-                  Cleaned Versions
-                </h3>
-                <p class="text-sm text-[#6B7280] mt-1">
-                  Messy gamertags cleaned up into more readable and Xbox-friendly formats.
-                </p>
+                <span class="inline-flex items-center px-2.5 py-1 bg-[#00D02B]/10 border border-[#00D02B]/20 rounded-sm text-[10px] font-bold tracking-[0.16em] uppercase text-[#00B324] mb-3">Clean</span>
+                <h3 class="text-xl md:text-2xl font-extrabold text-[#111827]">Cleaned Versions</h3>
+                <p class="text-sm text-[#6B7280] mt-1">Messy gamertags cleaned up into more readable and Xbox-friendly formats.</p>
               </div>
-
               <div id="cleanedList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
             </div>
+
           </div>
 
           <!-- CTA -->
           <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-lg">
-            <h3 class="text-lg md:text-xl font-extrabold text-[#111827]">
-              What This Tool Does
-            </h3>
+            <h3 class="text-lg md:text-xl font-extrabold text-[#111827]">What This Tool Does</h3>
             <p class="text-sm text-[#6B7280] mt-2 leading-relaxed">
               This tool checks whether your gamertag already looks clean. If it needs improvement, it gives a few cleaner, shorter, and rewritten suggestions that feel more Xbox-ready.
             </p>
-
             <div class="mt-5 flex flex-col sm:flex-row gap-3">
-              <a
-                href="/xbox-gamertag-availability-checker"
-                class="px-5 py-3 bg-brand hover:bg-brand-light text-white font-semibold text-sm uppercase tracking-[0.14em] rounded-lg transition-colors duration-200 text-center"
-              >
+              <a href="/xbox-gamertag-availability-checker" class="px-5 py-3 bg-brand hover:bg-brand-light text-white font-semibold text-sm uppercase tracking-[0.14em] rounded-lg transition-colors duration-200 text-center">
                 Check Availability
               </a>
-
-              <a
-                href="/gamertag-price-checker"
-                class="px-5 py-3 bg-white border border-[#D1D5DB] hover:border-[#00D02B]/40 text-[#6B7280] hover:text-[#00B324] font-semibold text-sm uppercase tracking-[0.14em] rounded-lg transition-all duration-150 text-center"
-              >
-                Check Price
+              <a href="/gamertag-price-checker" class="px-5 py-3 bg-white border border-[#D1D5DB] hover:border-[#00D02B]/40 text-[#6B7280] hover:text-[#00B324] font-semibold text-sm uppercase tracking-[0.14em] rounded-lg transition-all duration-150 text-center">
+                Check Value
               </a>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
     <!-- Ad slot -->
-    <section class="pb-16 section-white-subtle">
+    <section class="pb-10 section-white-subtle">
       <div class="max-w-3xl mx-auto px-4 sm:px-6">
         <div class="bg-white border border-dashed border-[#D1D5DB] rounded-lg px-5 py-4 text-center">
           <p class="text-[10px] font-bold tracking-[3px] uppercase text-[#94A3B8] mb-3">Advertisement</p>
@@ -280,7 +252,273 @@ const schema = {
         </div>
       </div>
     </section>
+
+    <!-- ── Article Sections ── -->
+    <section
+      class="pt-8 md:pt-16 pb-8"
+      style="background-color: hsl(220 14% 96%); width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;"
+    >
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-12">
+
+       <section
+  class="pt-8 md:pt-16 pb-8"
+  style="background-color: #ffffff; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-12">
+        <!-- H2-1: How It Works -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            How the Xbox Gamertag Optimizer Works
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Enter your current gamertag and the tool will analyze it for readability, length, formatting, and overall quality. If the name looks good already, the tool will confirm it. If there is room to improve, you will get up to three types of suggestions — shortened versions, rewritten alternatives, and cleaned-up formats.
+          </p>
+          <ol class="mb-0 space-y-2" style="list-style: decimal; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Enter your current Xbox gamertag
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Click <strong style="color: #111827;">Optimize</strong> to run the analysis
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Review your suggestions — shortened, rewritten, or cleaned-up versions
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Check if your new name is available using our <a href="/xbox-gamertag-availability-checker" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Xbox Gamertag Availability Checker</a>
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              If you want a completely new name instead, use the <a href="/" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Xbox Gamertag Generator</a>
+            </li>
+          </ol>
+        </div>
+
+        <!-- H2-2: Optimizer vs Generator -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            Optimizer vs Generator — What Is the Difference?
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            The Xbox Gamertag Optimizer and the Xbox Gamertag Generator are two different tools that solve different problems.
+          </p>
+          <ul class="mb-4 space-y-2" style="list-style: disc; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">The Generator</strong> creates brand new gamertag ideas from scratch. Use it when you do not have a name yet and want to explore options.
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">The Optimizer</strong> takes a name you already have and makes it better. Use it when you have a gamertag that feels messy, too long, or hard to read.
+            </li>
+          </ul>
+          <p class="mb-0" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            If your current name is something like xX_DarkWolf99_Xx and you want a cleaner version, that is what the Optimizer is for. If you want to start fresh with no existing name in mind, use the <a href="/" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Generator</a> instead.
+          </p>
+        </div>
+</div>
+      </section>
+        <!-- H2-3: Signs Your Gamertag Needs Improving -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            Signs Your Gamertag Needs Improving
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Not sure if your gamertag needs work? Here are the most common signs that a name could be cleaner or more readable:
+          </p>
+          <ul class="mb-0 space-y-2" style="list-style: disc; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">The name has random numbers that were added just to make it unique</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">It uses the xX or Xx pattern around the name</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">It has underscores or special characters that break up the flow</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">The name is over 10 characters and hard to read quickly</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">Other players misspell or misread your name regularly</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">The name no longer matches your style or gaming identity</li>
+          </ul>
+        </div>
+
+        <!-- H2-4: Before and After -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            Before and After Examples
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Here are some examples of what the optimizer can do with a weak or messy gamertag:
+          </p>
+          <div class="overflow-x-auto rounded-lg" style="border: 1px solid #E5E7EB;">
+            <table style="width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; font-size: clamp(14px, 1.8vw, 15px);">
+              <thead>
+                <tr style="background-color: hsl(107 76% 26%); color: #ffffff;">
+                  <th style="padding: 10px 16px; text-align: left; font-weight: 600;">Before</th>
+                  <th style="padding: 10px 16px; text-align: left; font-weight: 600;">After</th>
+                  <th style="padding: 10px 16px; text-align: left; font-weight: 600;">What Changed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background-color: #ffffff;">
+                  <td style="padding: 10px 16px; color: #111827; font-weight: 600; border-bottom: 1px solid #E5E7EB;">xX_DarkWolf99_Xx</td>
+                  <td style="padding: 10px 16px; color: hsl(107 76% 26%); font-weight: 700; border-bottom: 1px solid #E5E7EB;">DarkWolfX</td>
+                  <td style="padding: 10px 16px; color: #374151; border-bottom: 1px solid #E5E7EB;">Removed xX pattern, underscores, and numbers</td>
+                </tr>
+                <tr style="background-color: #F4FAF0;">
+                  <td style="padding: 10px 16px; color: #111827; font-weight: 600; border-bottom: 1px solid #E5E7EB;">ProGamer2009</td>
+                  <td style="padding: 10px 16px; color: hsl(107 76% 26%); font-weight: 700; border-bottom: 1px solid #E5E7EB;">ProGamer</td>
+                  <td style="padding: 10px 16px; color: #374151; border-bottom: 1px solid #E5E7EB;">Removed the year — cleaner and timeless</td>
+                </tr>
+                <tr style="background-color: #ffffff;">
+                  <td style="padding: 10px 16px; color: #111827; font-weight: 600; border-bottom: 1px solid #E5E7EB;">Th3_Sl4y3r_KiNG</td>
+                  <td style="padding: 10px 16px; color: hsl(107 76% 26%); font-weight: 700; border-bottom: 1px solid #E5E7EB;">SlayerKing</td>
+                  <td style="padding: 10px 16px; color: #374151; border-bottom: 1px solid #E5E7EB;">Replaced number substitutions with real letters</td>
+                </tr>
+                <tr style="background-color: #F4FAF0;">
+                  <td style="padding: 10px 16px; color: #111827; font-weight: 600; border-bottom: 1px solid #E5E7EB;">xxNightShadow_999xx</td>
+                  <td style="padding: 10px 16px; color: hsl(107 76% 26%); font-weight: 700; border-bottom: 1px solid #E5E7EB;">NightShadow</td>
+                  <td style="padding: 10px 16px; color: #374151; border-bottom: 1px solid #E5E7EB;">Removed all unnecessary formatting</td>
+                </tr>
+                <tr style="background-color: #ffffff;">
+                  <td style="padding: 10px 16px; color: #111827; font-weight: 600;">CoolGuyGamer123456</td>
+                  <td style="padding: 10px 16px; color: hsl(107 76% 26%); font-weight: 700;">CoolGuy</td>
+                  <td style="padding: 10px 16px; color: #374151;">Shortened and removed random numbers</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- H2-5: Optimization Tips -->
+        <div class="mb-0">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            Xbox Gamertag Optimization Tips
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            If you want to manually improve your gamertag before using the optimizer, here are the most effective changes you can make:
+          </p>
+          <ul class="mb-4 space-y-2" style="list-style: disc; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">Remove any numbers that were added just because the name was taken — look for a different base name instead</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">Cut the xX or Xx pattern — it looks dated and makes names harder to read</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">Replace underscores with nothing — most clean gamertags do not need them</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">Aim for 6 to 10 characters — short enough to read fast, long enough to be creative</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">Use real words or simple combinations — they are easier to remember and search</li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">Check availability after optimizing — your improved name may already be taken</li>
+          </ul>
+          <p class="mb-0" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            After optimizing your gamertag, check its value using our <a href="/gamertag-price-checker" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Xbox Gamertag Price Checker</a> to see how the changes affected its quality score.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Related Tools ── -->
+    <section class="section-white-subtle py-16 md:py-20">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="heading-section text-brand mb-3">Related Xbox Gamertag Tools</h2>
+          <p class="text-sm md:text-base font-ui leading-relaxed max-w-2xl mx-auto" style="color: hsl(215 16% 47%);">
+            After using this tool, explore our other free Xbox tools to complete your gaming identity.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            { title: "Xbox Gamertag Generator", desc: "Generate cool, funny, short, and unique Xbox gamertag ideas instantly.", href: "/", anchor: "generate Xbox gamertag ideas" },
+            { title: "Xbox Gamertag Availability Checker", desc: "Check whether an Xbox gamertag may be available or already taken.", href: "/xbox-gamertag-availability-checker", anchor: "check Xbox gamertag availability" },
+            { title: "Xbox Gamertag Search", desc: "Look up public Xbox profile details, Gamerscore, and game activity by gamertag.", href: "/xbox-gamertag-search", anchor: "search an Xbox profile by gamertag" },
+            { title: "Xbox Gamercard Generator", desc: "Create a custom Xbox-style profile card with your gamertag, avatar, and Gamerscore.", href: "/gamercard-generator", anchor: "create a custom Xbox gamercard" },
+            { title: "Xbox Gamertag Price Checker", desc: "Estimate whether a gamertag may be rare, short, or potentially valuable.", href: "/gamertag-price-checker", anchor: "estimate your Xbox gamertag value" },
+          ].map((tool) => (
+            <div class="bg-white rounded-xl p-6 hover:shadow-xl transition-shadow duration-200 group flex flex-col h-full">
+              <h3 class="text-lg font-semibold mb-2 text-[#1F2937] group-hover:text-brand transition-colors font-ui leading-snug">{tool.title}</h3>
+              <p class="text-[#4B5563] mb-4 font-ui leading-7 text-sm flex-1">{tool.desc}</p>
+              <a href={tool.href} class="inline-block bg-brand hover:bg-brand-light text-white px-4 py-2 rounded transition-colors font-ui text-center text-sm whitespace-nowrap">
+                {tool.anchor}
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+  
+    <!-- ── FAQ ── -->
+<section class="bg-gray-50 py-10 md:py-16">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10">
+          <div class="inline-flex items-center mb-4" style="background: hsl(107 76% 26% / 0.08); border: 1px solid hsl(107 76% 26% / 0.25); border-radius: 3px; padding: 3px 12px;">
+            <span style="font-family:'Inter',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color: hsl(107 76% 26%);">FAQ</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="font-family:'Inter',sans-serif; color: hsl(218 30% 9%); letter-spacing: -0.02em;">
+            Xbox Gamertag Optimizer FAQ
+          </h2>
+          <p class="text-sm max-w-2xl mx-auto" style="font-family:'Inter',sans-serif; color: hsl(215 16% 47%); line-height: 1.6;">
+            Common questions about improving and cleaning up your Xbox gamertag.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-3" id="faq-list-optimizer">
+          {faqItems.map((item) => (
+            <div class="faq-item-optimizer w-full overflow-hidden rounded-lg" style="background: #ffffff; border: 1px solid hsl(220 13% 91%); box-shadow: 0 2px 8px hsl(218 30% 9% / 0.06); transition: border-color 0.2s ease, box-shadow 0.2s ease;">
+              <button
+                class="faq-toggle-optimizer w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5"
+                type="button"
+                aria-expanded="false"
+                style="background: transparent; border: none; cursor: pointer; outline: none; touch-action: manipulation;"
+              >
+                <span class="text-sm sm:text-base font-semibold flex-1" style="font-family:'Inter',sans-serif; color: hsl(218 20% 16%); line-height: 1.4;">
+                  {item.question}
+                </span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: hsl(107 76% 26%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0;">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <div class="faq-content-optimizer" style="max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);">
+                <div class="mx-5 sm:mx-6" style="height:1px; background: hsl(220 13% 91%);"></div>
+                <div class="px-5 sm:px-6 py-4 sm:py-5">
+                  <p class="text-sm leading-relaxed" style="font-family:'Inter',sans-serif; color: hsl(215 16% 47%); line-height: 1.75;">{item.answer}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      </div>
+    </section>
+
+
   </div>
+
+  <style>
+    .faq-item-optimizer:hover {
+      border-color: hsl(107 76% 26% / 0.3) !important;
+      box-shadow: 0 4px 16px hsl(218 30% 9% / 0.1) !important;
+    }
+    .faq-item-optimizer.is-open {
+      border-color: hsl(107 76% 26% / 0.4) !important;
+      box-shadow: 0 4px 20px hsl(218 30% 9% / 0.1) !important;
+    }
+    .faq-item-optimizer.is-open .faq-toggle-optimizer span {
+      color: hsl(107 76% 26%) !important;
+    }
+    .faq-item-optimizer.is-open .faq-toggle-optimizer svg {
+      transform: rotate(180deg);
+    }
+    .faq-toggle-optimizer:hover {
+      background-color: hsl(220 13% 97%) !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .faq-content-optimizer { transition: none !important; }
+    }
+  </style>
 
   <script is:inline>
     const form = document.getElementById("optimizerForm");
@@ -312,10 +550,7 @@ const schema = {
       [emptyState, loadingState, errorState, results].forEach((el) => {
         el.classList.add("hidden");
       });
-
-      if (target) {
-        target.classList.remove("hidden");
-      }
+      if (target) target.classList.remove("hidden");
     }
 
     function escapeHtml(value) {
@@ -350,7 +585,6 @@ const schema = {
         list.innerHTML = "";
         return;
       }
-
       renderCards(list, items);
       section.classList.remove("hidden");
     }
@@ -361,20 +595,17 @@ const schema = {
         issuesList.innerHTML = "";
         return;
       }
-
       issuesList.innerHTML = items.map((item) => `
         <div class="flex items-start gap-3 bg-[#F8FAFC] border border-[#E5E7EB] rounded-lg px-4 py-3">
           <span class="mt-0.5 inline-block h-2 w-2 rounded-full bg-[#00D02B]"></span>
           <p class="text-sm text-[#6B7280]">${escapeHtml(item)}</p>
         </div>
       `).join("");
-
       issuesWrap.classList.remove("hidden");
     }
 
     function renderBadge(isGood, tier) {
       const tierText = tier ? ` · ${tier.replaceAll("_", " ")}` : "";
-
       if (isGood) {
         qualityBadge.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-[#00D02B]/10 text-[#00B324] border border-[#00D02B]/20";
         qualityBadge.textContent = `Looks Good${tierText}`;
@@ -382,7 +613,6 @@ const schema = {
         qualityBadge.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-amber-500/10 text-amber-700 border border-amber-500/20";
         qualityBadge.textContent = `Can Improve${tierText}`;
       }
-
       qualityBadgeWrap.classList.remove("hidden");
     }
 
@@ -408,20 +638,15 @@ const schema = {
       optimizeBtn.disabled = true;
 
       try {
-      const response = await fetch(`${apiBase}/api/optimize-gamertag`, {
+        const response = await fetch(`${apiBase}/api/optimize-gamertag`, {
           method: "POST",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-          },
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
 
         const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(data?.message || "Failed to optimize gamertag.");
-        }
+        if (!response.ok) throw new Error(data?.message || "Failed to optimize gamertag.");
 
         normalizedTag.textContent = data.normalized || payload.gamertag;
         optimizerMessage.textContent = data.message || "Gamertag checked.";
@@ -457,22 +682,45 @@ const schema = {
     document.addEventListener("click", async (event) => {
       const button = event.target.closest("[data-copy]");
       if (!button) return;
-
       const value = button.getAttribute("data-copy") || "";
       const original = button.textContent;
-
       try {
         await navigator.clipboard.writeText(value);
         button.textContent = "Copied";
-        setTimeout(() => {
-          button.textContent = original;
-        }, 1200);
+        setTimeout(() => { button.textContent = original; }, 1200);
       } catch {
         button.textContent = "Failed";
-        setTimeout(() => {
-          button.textContent = original;
-        }, 1200);
+        setTimeout(() => { button.textContent = original; }, 1200);
       }
     });
+
+    // FAQ accordion
+    function initFaqOptimizer() {
+      document.querySelectorAll('.faq-toggle-optimizer').forEach(function(btn) {
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', function() {
+          const item = btn.closest('.faq-item-optimizer');
+          const content = item ? item.querySelector('.faq-content-optimizer') : null;
+          if (!item || !content) return;
+          const isOpen = item.classList.contains('is-open');
+          document.querySelectorAll('.faq-item-optimizer').forEach(function(el) {
+            el.classList.remove('is-open');
+            const c = el.querySelector('.faq-content-optimizer');
+            if (c) c.style.maxHeight = '0';
+            const t = el.querySelector('.faq-toggle-optimizer');
+            if (t) t.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('is-open');
+            content.style.maxHeight = content.scrollHeight + 'px';
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    }
+
+    initFaqOptimizer();
+    document.addEventListener('astro:page-load', initFaqOptimizer);
   </script>
 </MainLayout>

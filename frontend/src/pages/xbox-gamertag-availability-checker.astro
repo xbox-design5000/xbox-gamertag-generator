@@ -4,12 +4,35 @@ import Header from "../components/layout/Header.astro";
 
 const pageUrl = "https://xboxgamertaggenerator.com/xbox-gamertag-availability-checker";
 
+const faqItems = [
+  {
+    question: "How do I check if an Xbox gamertag is available?",
+    answer: "Enter the gamertag you want in the checker field and click Check Tag. The tool will search for a matching public Xbox Live profile and show whether the name is likely available or already taken."
+  },
+  {
+    question: "What is the oldest Xbox gamertag?",
+    answer: "The oldest Xbox gamertags date back to the original Xbox Live launch in 2002. Some of the earliest registered names are considered OG gamertags because of their age and simplicity. These names are rarely available today."
+  },
+  {
+    question: "How many 3-letter Xbox gamertags are there?",
+    answer: "The total number of possible 3-letter combinations using standard letters is limited. Most short combinations were registered years ago on Xbox Live. Finding an available 3-letter gamertag today is rare, which is why they are considered valuable."
+  },
+  {
+    question: "Is this checker 100% accurate?",
+    answer: "No. This tool checks publicly available Xbox Live data and provides an estimate. A name showing as 'likely available' may still be reserved by Microsoft. Always verify directly on Xbox before committing to a name."
+  },
+  {
+    question: "Can I check gamertags in bulk?",
+    answer: "This tool checks one gamertag at a time. For bulk checking you would need a developer tool or the Xbox API. If you need multiple ideas to check, use our Xbox Gamertag Generator to get a list of name ideas first."
+  }
+];
+
 const schema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Gamertag Checker",
+  "name": "Xbox Gamertag Availability Checker",
   "url": pageUrl,
-  "description": "Check if an Xbox gamertag is taken or still likely available using live Xbox data.",
+  "description": "Check if an Xbox gamertag is available or already taken. Free Xbox gamertag availability checker — see instantly whether a name is in use on Xbox Live.",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Web",
   "inLanguage": "en-US",
@@ -29,14 +52,28 @@ const schema = {
     "target": pageUrl
   }
 };
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map((item) => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
 ---
 
 <MainLayout
-  title="Gamertag Checker – Check Xbox Gamertag Availability"
-  description="Check if an Xbox gamertag is taken or still likely available using live Xbox data. Test name ideas before you try to claim them."
+  title="Xbox Gamertag Availability Checker — Is Your Gamertag Taken?"
+  description="Check if an Xbox gamertag is available or already taken. Free Xbox gamertag availability checker — see instantly whether a name is in use on Xbox Live. No sign-up needed."
   canonical={pageUrl}
-  {schema}
+  schema={schema}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <Header />
 
   <div class="min-h-screen bg-[#F3F4F6] text-[#111827] font-ui">
@@ -52,19 +89,13 @@ const schema = {
               <span class="label-green">Free Tool</span>
             </div>
 
-          <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground mb-4 leading-tight">
-  Xbox Gamertag <span class="text-brand">Availability Checker</span>
-</h1>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground mb-4 leading-tight">
+              Xbox Gamertag <span class="text-brand">Availability Checker</span>
+            </h1>
 
-<div class="text-foreground-muted text-xs md:text-sm max-w-3xl mx-auto leading-relaxed space-y-3">
-  <p>
-    Check your ideal name with our Xbox Gamertag Availability Checker fast and hassle-free.
-  </p>
-
-  <p>
-    Enter your desired gamertag to instantly see if it’s available on Xbox Live. Get real-time results and secure the perfect name for your gaming identity before someone else does.
-  </p>
-</div>
+            <p class="text-foreground-muted text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+              The Xbox Gamertag Availability Checker is a free tool that lets you search any Xbox name and see whether it is likely available or already taken on Xbox Live. Enter a gamertag below to get an instant result.
+            </p>
           </div>
         </div>
       </div>
@@ -105,7 +136,7 @@ const schema = {
             Xbox gamertags are 1–15 characters. Results are based on live Xbox data.
           </p>
           <p class="text-[#9CA3AF] text-xs mt-1 leading-relaxed">
-            “Likely available” means no matching public Xbox profile was found. It may still be reserved by Microsoft.
+            "Likely available" means no matching public Xbox profile was found. It may still be reserved by Microsoft.
           </p>
         </div>
 
@@ -129,23 +160,265 @@ const schema = {
         <!-- Info note -->
         <p class="text-center text-xs text-[#9CA3AF] px-4 leading-relaxed">
           Results show whether a tag is <strong class="text-[#111827]">in use</strong> on Xbox Live.
-          “Likely available” means no profile was found — it may still be reserved by Microsoft.
+          "Likely available" means no profile was found — it may still be reserved by Microsoft.
         </p>
 
-      
-
       </div>
+
       <!-- Ad slot -->
-        <div class=" max-w-3xl mx-auto  mb-5 rounded-lg px-6 py-10 text-center border border-dashed border-[#D1D5DB] bg-white">
-          <p class="text-[10px] font-bold tracking-[3px] uppercase text-[#94A3B8] mb-3">Advertisement</p>
-          <div class="h-20 md:h-28 rounded bg-[#E5E7EB]"></div>
-        </div>
+      <div class="max-w-3xl mx-auto mb-5 rounded-lg px-6 py-10 text-center border border-dashed border-[#D1D5DB] bg-white mt-5">
+        <p class="text-[10px] font-bold tracking-[3px] uppercase text-[#94A3B8] mb-3">Advertisement</p>
+        <div class="h-20 md:h-28 rounded bg-[#E5E7EB]"></div>
+      </div>
     </section>
 
-      
+    <!-- ── Article Sections ── -->
+    <section
+      class="pt-8 md:pt-16 pb-8"
+      style="background-color: hsl(220 14% 96%); width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;"
+    >
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-12">
+
+         <section
+  class="pt-8 md:pt-16 pb-8"
+  style="background-color: #ffffff; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-12">
+        <!-- H2-1: How It Works -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            How the Xbox Gamertag Availability Checker Works
+          </h2>
+
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            This tool searches for public Xbox Live profiles matching the gamertag you enter. If a matching profile is found, the name is likely taken. If no profile is found, the name may still be available. Results are based on publicly available Xbox Live data and are not guaranteed.
+          </p>
+
+          <ol class="mb-6 space-y-2" style="list-style: decimal; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Enter the gamertag you want to check in the field above
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Click <strong style="color: #111827;">Check Tag</strong> to search Xbox Live
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              The tool will show whether the name is likely available or already taken
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              If the name is taken, <a href="/" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">generate new gamertag ideas</a> using our free generator
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              If the name looks available, check one more time on Xbox before setting it as your profile name
+            </li>
+          </ol>
+        </div>
+
+        <!-- H2-2: What Available and Taken Mean -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            What Available and Taken Mean on Xbox
+          </h2>
+
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            When this tool shows a gamertag as <strong style="color: #111827;">"likely available"</strong> it means no matching public Xbox Live profile was found for that name. The name may still be reserved by Microsoft even if no profile appears. When a gamertag is <strong style="color: #111827;">"taken"</strong> it means an active Xbox profile already uses that base name.
+          </p>
+
+          <p class="mb-0" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Xbox allows two players to share the same base gamertag. When this happens, Xbox adds a number suffix to tell them apart. For example, one player may appear as ShadowWolf and another as ShadowWolf with a number after it. If you want a name without a suffix, you need a base name that is not already in use.
+          </p>
+        </div>
+
+      </div>
+      </section>
+
+
+        <!-- H2-3: Why 12 Characters -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            Why Xbox Gamertags Are Only 12 Characters
+          </h2>
+
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Xbox limits gamertags to 12 characters to keep names short, readable, and consistent across all profiles, leaderboards, friend lists, and game interfaces. This limit applies to the base name — not including any suffix numbers Xbox may add.
+          </p>
+
+          <p class="mb-0" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            If you want a shorter name, use the <strong style="color: #111827;">short name</strong> or <strong style="color: #111827;">short with no numbers</strong> filter in our <a href="/" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Xbox Gamertag Generator</a> to get ideas that fit within a tighter character range.
+          </p>
+        </div>
+
+        <!-- H2-4: How to Change -->
+        <div class="mb-0">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            How to Change Your Xbox Gamertag
+          </h2>
+
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            If the gamertag you want is already taken or you want a fresh start, you can change your Xbox gamertag at any time. Your first gamertag change is free. After that, each change costs a fee that varies by region.
+          </p>
+
+          <ul class="mb-5 space-y-2" style="list-style: disc; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Open the Xbox app or go to account.xbox.com
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Go to your profile and select your current gamertag
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Choose <strong style="color: #111827;">"Change gamertag"</strong> and enter your new name
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Check availability and confirm the change
+            </li>
+          </ul>
+
+          <p class="mb-0" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Before changing your gamertag, use this checker to confirm your new name is available. Then use our <a href="/gamertag-optimizer" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Gamertag Optimizer</a> if you want cleaner alternatives based on your current name.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Related Tools ── -->
+    <section class="section-white-subtle py-16 md:py-20">
+      <div class="max-w-5xl mx-auto px-6">
+
+        <div class="text-center mb-12">
+          <h2 class="heading-section text-brand mb-3">Related Xbox Gamertag Tools</h2>
+          <p class="text-sm md:text-base font-ui leading-relaxed max-w-2xl mx-auto" style="color: hsl(215 16% 47%);">
+            After using this tool, explore our other free Xbox tools to complete your gaming identity.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            { title: "Xbox Gamertag Generator", desc: "Generate cool, funny, short, and unique Xbox gamertag ideas instantly.", href: "/", anchor: "generate Xbox gamertag ideas" },
+            { title: "Xbox Gamertag Search", desc: "Look up public Xbox profile details, Gamerscore, and game activity by gamertag.", href: "/xbox-gamertag-search", anchor: "search an Xbox profile by gamertag" },
+            { title: "Xbox Gamercard Generator", desc: "Create a custom Xbox-style profile card with your gamertag, avatar, and Gamerscore.", href: "/gamercard-generator", anchor: "create a custom Xbox gamercard" },
+            { title: "Xbox Gamertag Price Checker", desc: "Estimate whether a gamertag may be rare, short, or potentially valuable.", href: "/gamertag-price-checker", anchor: "estimate your Xbox gamertag value" },
+            { title: "Xbox Gamertag Optimizer", desc: "Shorten, clean, and rewrite weak or messy Xbox gamertags into better options.", href: "/gamertag-optimizer", anchor: "optimize your Xbox gamertag" },
+          ].map((tool) => (
+            <div class="bg-white rounded-xl p-6 hover:shadow-xl transition-shadow duration-200 group flex flex-col h-full">
+              <h3 class="text-lg font-semibold mb-2 text-[#1F2937] group-hover:text-brand transition-colors font-ui leading-snug">
+                {tool.title}
+              </h3>
+              <p class="text-[#4B5563] mb-4 font-ui leading-7 text-sm flex-1">
+                {tool.desc}
+              </p>
+              <a
+                href={tool.href}
+                class="inline-block bg-brand hover:bg-brand-light text-white px-4 py-2 rounded transition-colors font-ui text-center text-sm whitespace-nowrap"
+              >
+                {tool.anchor}
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ── -->
+  
+<section class="bg-gray-50 py-10 md:py-16">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+
+        <div class="text-center mb-10">
+          <div
+            class="inline-flex items-center mb-4"
+            style="background: hsl(107 76% 26% / 0.08); border: 1px solid hsl(107 76% 26% / 0.25); border-radius: 3px; padding: 3px 12px;"
+          >
+            <span style="font-family:'Inter',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color: hsl(107 76% 26%);">FAQ</span>
+          </div>
+          <h2
+            class="text-2xl sm:text-3xl font-bold tracking-tight mb-3"
+            style="font-family:'Inter',sans-serif; color: hsl(218 30% 9%); letter-spacing: -0.02em;"
+          >
+            Xbox Gamertag Availability Checker FAQ
+          </h2>
+          <p class="text-sm max-w-2xl mx-auto" style="font-family:'Inter',sans-serif; color: hsl(215 16% 47%); line-height: 1.6;">
+            Common questions about checking Xbox gamertag availability.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-3" id="faq-list-checker">
+          {faqItems.map((item, index) => (
+            <div
+              class="faq-item-checker w-full overflow-hidden rounded-lg"
+              style="background: #ffffff; border: 1px solid hsl(220 13% 91%); box-shadow: 0 2px 8px hsl(218 30% 9% / 0.06); transition: border-color 0.2s ease, box-shadow 0.2s ease;"
+            >
+              <button
+                class="faq-toggle-checker w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5"
+                type="button"
+                aria-expanded="false"
+                style="background: transparent; border: none; cursor: pointer; outline: none; touch-action: manipulation;"
+              >
+                <span
+                  class="text-sm sm:text-base font-semibold flex-1"
+                  style="font-family:'Inter',sans-serif; color: hsl(218 20% 16%); line-height: 1.4;"
+                >
+                  {item.question}
+                </span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                  style="color: hsl(107 76% 26%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0;">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <div class="faq-content-checker" style="max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);">
+                <div class="mx-5 sm:mx-6" style="height:1px; background: hsl(220 13% 91%);"></div>
+                <div class="px-5 sm:px-6 py-4 sm:py-5">
+                  <p class="text-sm leading-relaxed" style="font-family:'Inter',sans-serif; color: hsl(215 16% 47%); line-height: 1.75;">
+                    {item.answer}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+
+ 
 
   </div>
 </MainLayout>
+
+<style>
+  .faq-item-checker:hover {
+    border-color: hsl(107 76% 26% / 0.3) !important;
+    box-shadow: 0 4px 16px hsl(218 30% 9% / 0.1) !important;
+  }
+  .faq-item-checker.is-open {
+    border-color: hsl(107 76% 26% / 0.4) !important;
+    box-shadow: 0 4px 20px hsl(218 30% 9% / 0.1) !important;
+  }
+  .faq-item-checker.is-open .faq-toggle-checker span {
+    color: hsl(107 76% 26%) !important;
+  }
+  .faq-item-checker.is-open .faq-toggle-checker svg {
+    transform: rotate(180deg);
+  }
+  .faq-toggle-checker:hover {
+    background-color: hsl(220 13% 97%) !important;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-content-checker { transition: none !important; }
+  }
+</style>
 
 <script>
   const API_BASE = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:8000';
@@ -203,9 +476,7 @@ const schema = {
         <div>
           <p class="text-[#111827] font-bold text-lg">${escHtml(tag)}</p>
           <p class="text-[#00B324] text-xs font-bold uppercase tracking-[0.16em] mt-1">Likely Available</p>
-          <p class="text-[#6B7280] text-sm mt-1">
-            No Xbox profile matched this gamertag. It may be free to claim.
-          </p>
+          <p class="text-[#6B7280] text-sm mt-1">No Xbox profile matched this gamertag. It may be free to claim.</p>
         </div>
       </div>
     `;
@@ -222,9 +493,7 @@ const schema = {
         <div>
           <p class="text-[#111827] font-bold text-lg">${escHtml(tag)}</p>
           <p class="text-red-500 text-xs font-bold uppercase tracking-[0.16em] mt-1">Taken</p>
-          <p class="text-[#6B7280] text-sm mt-1">
-            This gamertag is already registered to an Xbox account.
-          </p>
+          <p class="text-[#6B7280] text-sm mt-1">This gamertag is already registered to an Xbox account.</p>
         </div>
       </div>
     `;
@@ -253,4 +522,33 @@ const schema = {
 
   btn.addEventListener('click', checkTag);
   input.addEventListener('keydown', e => { if (e.key === 'Enter') checkTag(); });
+
+  // FAQ accordion
+  function initFaqChecker() {
+    document.querySelectorAll('.faq-toggle-checker').forEach(function(btn) {
+      if ((btn as HTMLElement).dataset.bound === 'true') return;
+      (btn as HTMLElement).dataset.bound = 'true';
+      btn.addEventListener('click', function() {
+        const item = (btn as HTMLElement).closest('.faq-item-checker');
+        const content = item ? item.querySelector('.faq-content-checker') as HTMLElement : null;
+        if (!item || !content) return;
+        const isOpen = item.classList.contains('is-open');
+        document.querySelectorAll('.faq-item-checker').forEach(function(el) {
+          el.classList.remove('is-open');
+          const c = el.querySelector('.faq-content-checker') as HTMLElement;
+          if (c) c.style.maxHeight = '0';
+          const t = el.querySelector('.faq-toggle-checker') as HTMLElement;
+          if (t) t.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('is-open');
+          content.style.maxHeight = content.scrollHeight + 'px';
+          (btn as HTMLElement).setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  }
+
+  initFaqChecker();
+  document.addEventListener('astro:page-load', initFaqChecker);
 </script>

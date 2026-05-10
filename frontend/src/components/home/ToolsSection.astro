@@ -13,6 +13,7 @@ type Tool = {
   description: string;
   icon: typeof Search;
   slug: string;
+  anchor: string;
   comingSoon?: boolean;
 };
 
@@ -20,71 +21,83 @@ const tools: Tool[] = [
   {
     id: "1",
     title: "Xbox Gamertag Generator",
-    description: "Instantly create unique, funny, and cool gamertags with AI-powered suggestions.",
+    description: "Generate cool, funny, short, and unique Xbox gamertag ideas instantly.",
     slug: "/",
+    anchor: "generate Xbox gamertag ideas",
     icon: UserCheck,
   },
   {
     id: "2",
-    title: "Xbox Gamercard Generator",
-    description: "Create a custom Xbox gamercard badge showing your gamertag, gamerscore, and avatar.",
-    icon: Gift,
-    slug: "gamercard-generator",
+    title: "Xbox Gamertag Availability Checker",
+    description: "Check whether an Xbox gamertag may be available or already taken.",
+    icon: Search,
+    slug: "xbox-gamertag-availability-checker",
+    anchor: "check Xbox gamertag availability",
   },
   {
     id: "3",
-    title: "Xbox Gamertag Price Checker",
-    description: "Estimate the potential market value of any gamertag based on length, rarity, and demand.",
-    icon: DollarSign,
-    slug: "gamertag-price-checker",
+    title: "Xbox Gamertag Search",
+    description: "Look up public Xbox profile details, Gamerscore, and game activity by gamertag.",
+    icon: BarChart3,
+    slug: "xbox-gamertag-search",
+    anchor: "search an Xbox profile by gamertag",
   },
   {
     id: "4",
-    title: "Xbox Gamer Profile & Stats Checker",
-    description: "View public stats, gamerscore, recent games, and achievement progress tied to any gamertag.",
-    icon: BarChart3,
-    slug: "xbox-gamertag-search",
+    title: "Xbox Gamercard Generator",
+    description: "Create a custom Xbox-style profile card with your gamertag, avatar, and Gamerscore.",
+    icon: Gift,
+    slug: "gamercard-generator",
+    anchor: "create a custom Xbox gamercard",
   },
   {
     id: "5",
-    title: "Xbox Gamertag Availability Checker",
-    description: "Instantly see if your desired tag is still up for grabs before someone else snags it.",
-    icon: Search,
-    slug: "xbox-gamertag-availability-checker",
+    title: "Xbox Gamertag Price Checker",
+    description: "Estimate whether a gamertag may be rare, short, or potentially valuable.",
+    icon: DollarSign,
+    slug: "gamertag-price-checker",
+    anchor: "estimate your Xbox gamertag value",
   },
   {
     id: "6",
-    title: "Xbox Gamertag Optimizer Tool",
-    description: "Check if your gamertag already looks clean, and get a few better suggestions only when it needs improvement.",
+    title: "Xbox Gamertag Optimizer",
+    description: "Shorten, clean, and rewrite weak or messy Xbox gamertags into better options.",
     icon: Sparkles,
     slug: "gamertag-optimizer",
-  }
+    anchor: "optimize your Xbox gamertag",
+  },
 ];
 
 const getToolLink = (slug: string): string => {
   if (slug === "/") return "/";
-
   const map: Record<string, string> = {
+    "xbox-gamertag-availability-checker": "/xbox-gamertag-availability-checker",
+    "xbox-gamertag-search": "/xbox-gamertag-search",
     "gamercard-generator": "/gamercard-generator",
     "gamertag-price-checker": "/gamertag-price-checker",
-    "xbox-gamertag-search": "/xbox-gamertag-search",
-    "xbox-gamertag-availability-checker": "/xbox-gamertag-availability-checker",
     "gamertag-optimizer": "/gamertag-optimizer",
   };
-
   return map[slug] ?? `/${slug}`;
 };
 ---
 
 <section class="section-white-subtle py-16 md:py-20">
   <div class="max-w-5xl mx-auto px-6">
-    <h2 class="text-center heading-section text-brand mb-12">
-      Explore More Tools
-    </h2>
+
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h2 class="heading-section text-brand mb-3">
+        Related Xbox Gamertag Tools
+      </h2>
+      <p class="text-sm md:text-base font-ui leading-relaxed max-w-2xl mx-auto" style="color: hsl(215 16% 47%);">
+        After using this tool, explore our other free Xbox tools to complete your gaming identity.
+      </p>
+    </div>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       {tools.map((tool) => {
         const Icon = tool.icon;
+        const href = getToolLink(tool.slug);
 
         return (
           <div
@@ -121,10 +134,10 @@ const getToolLink = (slug: string): string => {
                 </button>
               ) : (
                 <a
-                  href={getToolLink(tool.slug)}
-                  class="inline-block bg-brand hover:bg-brand-light text-white px-4 py-2 rounded transition-colors font-ui w-full text-center sm:w-auto"
+                  href={href}
+                class="inline-block bg-brand hover:bg-brand-light text-white px-4 py-2 rounded transition-colors font-ui w-full text-center sm:w-auto text-sm whitespace-nowrap"
                 >
-                  Go to Tool
+                  {tool.anchor}
                 </a>
               )}
             </div>
@@ -133,9 +146,11 @@ const getToolLink = (slug: string): string => {
       })}
     </div>
 
+    <!-- Ad slot -->
     <div class="bg-[#F3F4F6] rounded-lg px-4 md:px-6 py-6 text-center border-2 border-dashed border-[#D1D5DB] mt-8">
       <p class="text-sm md:text-base text-[#6B7280] mb-2 font-ui">Advertisement</p>
       <div class="h-20 md:h-32 lg:h-40 bg-[#E5E7EB] rounded"></div>
     </div>
+
   </div>
 </section>

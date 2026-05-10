@@ -45,8 +45,10 @@ const schema = {
 };
 ---
 <MainLayout
-  title="Xbox Gamertag Generator | Free Cool, Funny & Unique Xbox Name Ideas"
-  description="Generate cool, funny, clean, and unique Xbox gamertag ideas instantly. Free Xbox Gamertag Generator with style, theme, and character limit filters."
+  title="Xbox Gamertag Generator — Free Random Xbox Name Generator"
+  description="Free Xbox Gamertag Generator with gender, theme, and language filters.
+Generate cool, funny, aesthetic, or short Xbox name ideas in English,
+Japanese, Spanish, and 11 more — no sign-up needed."
   {schema}
 >
   <Header />
@@ -75,7 +77,9 @@ const schema = {
       </h1>
 
       <p class="font-ui text-sm md:text-lg text-foreground-muted mb-3 max-w-2xl">
-  Generate cool, funny, clean, and unique Xbox gamertag ideas instantly with our free Xbox Gamertag Generator  </p>
+Free Xbox Gamertag Generator with gender, theme, and language 
+filters. Generate cool, funny, aesthetic, or short Xbox name 
+ideas in seconds — no sign-up needed. </p>
 
       <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-3 mb-10 px-4 sm:px-0">
         <div class="flex items-center gap-1.5">
@@ -102,9 +106,11 @@ const schema = {
         <GamertagGenerator />
       </div>
 
-      <p class="font-ui text-sm md:text-base text-foreground-muted mt-10 max-w-3xl leading-relaxed text-center">
-        Use this free Xbox Gamertag Generator to create cool, unique, and rare Xbox name ideas in seconds. It helps you find a clean gamertag for Xbox, PC, and other gaming profiles.
-      </p>
+   
+
+<p class="font-ui text-sm md:text-base text-foreground-muted mt-3 max-w-3xl leading-relaxed text-center">
+  Already picked a name? Use our <a href="/xbox-gamertag-availability-checker" class="text-brand font-semibold underline underline-offset-2 hover:text-brand-light transition-colors duration-200">Xbox Gamertag Availability Checker</a> to see if it is still available on Xbox Live before using it on your profile.
+</p>
     </div>
 
     <div
@@ -112,9 +118,9 @@ const schema = {
       style="background: linear-gradient(90deg, transparent, #1F2937 20%, #00D02B 50%, #1F2937 80%, transparent);"
     ></div>
   </section>
-
+<ArticleSection />
   <FAQSection />
-  <ArticleSection />
+  
   <BlogSection />
   <ToolsSection />
 </MainLayout>

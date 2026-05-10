@@ -4,12 +4,35 @@ import Header from "../components/layout/Header.astro";
 
 const pageUrl = "https://xboxgamertaggenerator.com/gamertag-price-checker";
 
+const faqItems = [
+  {
+    question: "What is an OG Xbox gamertag?",
+    answer: "An OG gamertag is a short, clean, original name registered early on Xbox Live. These are usually one word, letters only, with no numbers or suffixes. They are rare and considered desirable by the Xbox community."
+  },
+  {
+    question: "How much is a short Xbox gamertag worth?",
+    answer: "Short gamertags — especially 3 to 5 characters — are considered more valuable because they are rare, clean, and hard to find available. The exact value depends on readability, format, and demand."
+  },
+  {
+    question: "Can you sell an Xbox gamertag?",
+    answer: "Selling Xbox gamertags may violate Microsoft Terms of Service. This tool is for informational purposes only and does not support the buying or selling of gamertags."
+  },
+  {
+    question: "Is the price shown an official Xbox value?",
+    answer: "No. The score is an estimate based on length, rarity, and readability. It is not an official Xbox or Microsoft valuation."
+  },
+  {
+    question: "What gamertags are considered rare?",
+    answer: "Gamertags are considered rare when they are very short, use letters only, contain a single recognizable word, or were registered in the early days of Xbox Live."
+  }
+];
+
 const schema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Xbox Gamertag Price Checker",
   "url": pageUrl,
-  "description": "Estimate the value of an Xbox gamertag based on length, readability, rarity, and overall naming quality.",
+  "description": "Estimate the value of your Xbox gamertag based on length, rarity, and readability. Free Xbox gamertag worth checker — enter any name and get an instant score.",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Web",
   "inLanguage": "en-US",
@@ -29,19 +52,33 @@ const schema = {
     "target": pageUrl
   }
 };
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map((item) => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
 ---
 
 <MainLayout
-  title="Xbox Gamertag Price Checker – Estimate Your Gamertag Value"
-  description="Use our free Xbox Gamertag Price Checker to estimate a gamertag’s value based on rarity, length, readability, and overall quality."
+  title="Xbox Gamertag Price Checker — How Much Is Your Gamertag Worth?"
+  description="Estimate the value of your Xbox gamertag based on length, rarity, and readability. Free Xbox gamertag worth checker — enter any name and get an instant score."
   canonical={pageUrl}
   {schema}
 >
-
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <Header />
 
   <div class="min-h-screen bg-[#F3F4F6] font-ui text-[#111827]">
-    <!-- Hero -->
+
+    <!-- ── Hero ── -->
     <section class="section-dark-alt py-8">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div class="bg-card border border-default rounded-xl py-14 md:py-16 px-6 md:px-10 text-center shadow-card relative overflow-hidden">
@@ -56,17 +93,18 @@ const schema = {
               Xbox Gamertag <span class="text-brand">Price Checker</span>
             </h1>
 
-            <p class="text-base md:text-md text-foreground-muted max-w-2xl mx-auto leading-relaxed">
-             Use our gamertag price checker to instantly find the true value of your Xbox name. If you’ve ever wondered "how much is my gamertag worth" or "how much is my Xbox account worth", our tool acts as a powerful Xbox account value calculator, analysing rarity, length, and demand to estimate your Xbox gamertag price. Whether you’re buying, selling, or just curious, this tool gives you a quick and accurate insight into your gamertag’s market value.
+            <p class="text-foreground-muted text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+              The Xbox Gamertag Price Checker estimates the value of any Xbox gamertag based on length, rarity, readability, and format. Enter a gamertag below to get an instant score. Results are estimates for informational purposes only and are not official Xbox valuations.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Tool -->
+    <!-- ── Tool ── -->
     <section class="section-white-subtle py-10">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-5">
+
         <!-- Input Card -->
         <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 md:p-7 shadow-lg">
           <label class="text-xs font-bold tracking-[0.18em] uppercase text-[#6B7280] block mb-3">
@@ -85,14 +123,13 @@ const schema = {
               id="checkBtn"
               class="px-6 py-3 bg-brand hover:bg-brand-light text-white font-semibold text-sm uppercase tracking-[0.14em] rounded-lg transition-colors duration-200 whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Check Price
+              Check Value
             </button>
           </div>
 
           <p class="text-xs text-[#9CA3AF] mt-2">
             Max 12 characters · Letters, numbers and spaces only
           </p>
-
           <p class="text-xs text-[#9CA3AF] mt-1 leading-relaxed">
             Tip: Short, clean tags often score higher. Premium-looking names often use strong letters
             like Z, X, V, K, or Y — but avoid too many numbers or old-style patterns like xX or underscores.
@@ -115,19 +152,14 @@ const schema = {
 
         <!-- Results -->
         <div id="results" class="hidden space-y-4">
+
           <!-- Tier + Price Card -->
           <div class="bg-white border border-[#E5E7EB] rounded-xl p-8 text-center shadow-lg">
             <p class="text-xs font-bold tracking-[0.16em] uppercase text-[#9CA3AF] mb-2">
               Estimated value for
             </p>
-
             <h2 id="resultTag" class="text-3xl md:text-4xl font-extrabold text-[#111827] mb-5"></h2>
-
-            <div
-              id="tierBadge"
-              class="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold mb-6"
-            ></div>
-
+            <div id="tierBadge" class="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold mb-6"></div>
             <div class="text-4xl md:text-5xl font-extrabold text-brand mb-2" id="priceRange"></div>
             <p class="text-xs text-[#9CA3AF] uppercase tracking-wider">Estimated market value</p>
           </div>
@@ -138,15 +170,9 @@ const schema = {
               <span class="text-xs font-bold tracking-[0.16em] uppercase text-[#6B7280]">Rarity Score</span>
               <span id="scoreValue" class="text-sm font-extrabold text-brand"></span>
             </div>
-
             <div class="w-full bg-[#E5E7EB] rounded-full h-3 overflow-hidden">
-              <div
-                id="scoreBar"
-                class="h-3 rounded-full transition-all duration-700 ease-out"
-                style="width: 0%"
-              ></div>
+              <div id="scoreBar" class="h-3 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
             </div>
-
             <div class="flex justify-between text-xs text-[#9CA3AF] mt-1.5">
               <span>0</span>
               <span>25</span>
@@ -158,10 +184,17 @@ const schema = {
 
           <!-- Breakdown Card -->
           <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-lg">
-            <h3 class="text-sm font-bold text-[#111827] mb-5">
-              Score Breakdown
-            </h3>
+            <h3 class="text-sm font-bold text-[#111827] mb-5">Score Breakdown</h3>
             <div id="breakdownList" class="space-y-0"></div>
+          </div>
+
+          <!-- CTA — low score -->
+          <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 text-center shadow-lg">
+            <p class="text-sm text-[#6B7280] mb-3 leading-relaxed">
+              Score lower than expected? Use our
+              <a href="/gamertag-optimizer" class="text-brand font-semibold underline underline-offset-2 hover:text-brand-light transition-colors duration-200">Gamertag Optimizer</a>
+              to get cleaner, higher-scoring alternatives.
+            </p>
           </div>
 
           <!-- Try Another -->
@@ -181,13 +214,12 @@ const schema = {
             gamertags may violate Microsoft's Terms of Service.
           </p>
         </div>
+
       </div>
     </section>
 
-    
-
     <!-- Ad slot -->
-    <section class="pb-16 section-white-subtle mt-2 ">
+    <section class="pb-10 section-white-subtle mt-2">
       <div class="max-w-3xl mx-auto px-4 sm:px-6">
         <div class="bg-white border border-dashed border-[#D1D5DB] rounded-lg px-5 py-4 text-center">
           <p class="text-[10px] font-bold tracking-[3px] uppercase text-[#94A3B8] mb-3">Advertisement</p>
@@ -195,70 +227,274 @@ const schema = {
         </div>
       </div>
     </section>
+
+    <!-- ── Article Sections ── -->
+    <section
+      class="pt-8 md:pt-16 pb-8"
+      style="background-color: hsl(220 14% 96%); width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;"
+    >
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-12">
+
+        <!-- H2-1: How It Works -->
+          <section
+  class="pt-8 md:pt-16 pb-8"
+  style="background-color: #ffffff; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-12">
+
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            How the Xbox Gamertag Price Checker Works
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            The tool analyzes the gamertag you enter and scores it based on several value factors. The higher the score, the more desirable the gamertag is likely to be in the gaming community.
+          </p>
+          <ol class="mb-0 space-y-2" style="list-style: decimal; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Enter any Xbox gamertag in the field above
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              Click <strong style="color: #111827;">Check Value</strong> to run the analysis
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              View your gamertag score and value breakdown
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              If your score is low, try our <a href="/gamertag-optimizer" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Gamertag Optimizer</a> to get cleaner, higher-scoring alternatives
+            </li>
+          </ol>
+        </div>
+
+        <!-- H2-2: What Makes a Gamertag Valuable -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            What Makes an Xbox Gamertag Valuable?
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            Not all gamertags are equal in terms of desirability. Several factors affect how valuable or rare a gamertag is considered to be in the Xbox community.
+          </p>
+          <ul class="mb-0 space-y-2" style="list-style: disc; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">Length</strong> — shorter names are rarer and harder to get. A 3-letter gamertag is far more valuable than a 12-letter one.
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">Letters only</strong> — names with no numbers look cleaner and are considered more desirable.
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">Readability</strong> — names that are easy to read, pronounce, and remember score higher.
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">Real words</strong> — dictionary words, single meaningful words, and clean one-word names hold more value.
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">No symbols or underscores</strong> — clean formatting without special characters looks more professional.
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">Age and rarity</strong> — gamertags registered early on Xbox Live and never changed are considered OG.
+            </li>
+          </ul>
+        </div>
+
+        </div>
+        </section>
+
+
+
+        <!-- H2-3: What Is an OG Gamertag -->
+        <div class="mb-12">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            What Is an OG Xbox Gamertag?
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            An OG gamertag is a short, clean, and original gamertag that was registered early on Xbox Live. OG stands for "original" and in the gaming community it refers to names that are simple, rare, and hard to get today. These are usually one word, letters only, and have no numbers or suffixes attached.
+          </p>
+          <p class="mb-0" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            OG gamertags are considered desirable because they show the account has been active for a long time and the name was available before Xbox Live grew into a large platform. A 3-letter or 4-letter clean gamertag with no numbers is a classic example of an OG-style name.
+          </p>
+        </div>
+
+        <!-- H2-4: Value Score Explained -->
+        <div class="mb-0">
+          <h2
+            class="mt-6 mb-4"
+            style="font-family: 'Inter', sans-serif; font-size: clamp(1.5rem, 3vw, 1.75rem); font-weight: 700; color: hsl(107 76% 26%); line-height: 1.2; letter-spacing: -0.02em;"
+          >
+            Xbox Gamertag Value Score Explained
+          </h2>
+          <p class="mb-4" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            The value score this tool provides is based on a combination of the factors above. Here is a general guide to what each score level means:
+          </p>
+          <ul class="mb-4 space-y-2" style="list-style: disc; padding-left: 1.5rem;">
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">Very High</strong> — ultra short, letters only, real word, no numbers. Very rare.
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">High</strong> — short name, clean format, easy to read, no obvious issues.
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">Medium</strong> — decent length, minor formatting issues, readable but not exceptional.
+            </li>
+            <li style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.75; color: #374151;">
+              <strong style="color: #111827;">Low</strong> — long name, random numbers, symbols, or hard-to-read formatting.
+            </li>
+          </ul>
+          <p class="mb-0" style="font-family: 'Inter', sans-serif; font-size: clamp(15px, 2vw, 16px); line-height: 1.8; color: #374151;">
+            This score is an estimate for informational purposes only. It is not an official Xbox valuation and does not reflect actual market prices.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Related Tools ── -->
+    <section class="section-white-subtle py-16 md:py-20">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="heading-section text-brand mb-3">Related Xbox Gamertag Tools</h2>
+          <p class="text-sm md:text-base font-ui leading-relaxed max-w-2xl mx-auto" style="color: hsl(215 16% 47%);">
+            After using this tool, explore our other free Xbox tools to complete your gaming identity.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            { title: "Xbox Gamertag Generator", desc: "Generate cool, funny, short, and unique Xbox gamertag ideas instantly.", href: "/", anchor: "generate Xbox gamertag ideas" },
+            { title: "Xbox Gamertag Availability Checker", desc: "Check whether an Xbox gamertag may be available or already taken.", href: "/xbox-gamertag-availability-checker", anchor: "check Xbox gamertag availability" },
+            { title: "Xbox Gamertag Search", desc: "Look up public Xbox profile details, Gamerscore, and game activity by gamertag.", href: "/xbox-gamertag-search", anchor: "search an Xbox profile by gamertag" },
+            { title: "Xbox Gamercard Generator", desc: "Create a custom Xbox-style profile card with your gamertag, avatar, and Gamerscore.", href: "/gamercard-generator", anchor: "create a custom Xbox gamercard" },
+            { title: "Xbox Gamertag Optimizer", desc: "Shorten, clean, and rewrite weak or messy Xbox gamertags into better options.", href: "/gamertag-optimizer", anchor: "optimize your Xbox gamertag" },
+          ].map((tool) => (
+            <div class="bg-white rounded-xl p-6 hover:shadow-xl transition-shadow duration-200 group flex flex-col h-full">
+              <h3 class="text-lg font-semibold mb-2 text-[#1F2937] group-hover:text-brand transition-colors font-ui leading-snug">{tool.title}</h3>
+              <p class="text-[#4B5563] mb-4 font-ui leading-7 text-sm flex-1">{tool.desc}</p>
+              <a href={tool.href} class="inline-block bg-brand hover:bg-brand-light text-white px-4 py-2 rounded transition-colors font-ui text-center text-sm whitespace-nowrap">
+                {tool.anchor}
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ── -->
+    
+<section class="bg-gray-50 py-10 md:py-16">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10">
+          <div class="inline-flex items-center mb-4" style="background: hsl(107 76% 26% / 0.08); border: 1px solid hsl(107 76% 26% / 0.25); border-radius: 3px; padding: 3px 12px;">
+            <span style="font-family:'Inter',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color: hsl(107 76% 26%);">FAQ</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="font-family:'Inter',sans-serif; color: hsl(218 30% 9%); letter-spacing: -0.02em;">
+            Xbox Gamertag Price Checker FAQ
+          </h2>
+          <p class="text-sm max-w-2xl mx-auto" style="font-family:'Inter',sans-serif; color: hsl(215 16% 47%); line-height: 1.6;">
+            Common questions about Xbox gamertag value and rarity.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-3" id="faq-list-price">
+          {faqItems.map((item) => (
+            <div class="faq-item-price w-full overflow-hidden rounded-lg" style="background: #ffffff; border: 1px solid hsl(220 13% 91%); box-shadow: 0 2px 8px hsl(218 30% 9% / 0.06); transition: border-color 0.2s ease, box-shadow 0.2s ease;">
+              <button
+                class="faq-toggle-price w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5"
+                type="button"
+                aria-expanded="false"
+                style="background: transparent; border: none; cursor: pointer; outline: none; touch-action: manipulation;"
+              >
+                <span class="text-sm sm:text-base font-semibold flex-1" style="font-family:'Inter',sans-serif; color: hsl(218 20% 16%); line-height: 1.4;">
+                  {item.question}
+                </span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: hsl(107 76% 26%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0;">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <div class="faq-content-price" style="max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);">
+                <div class="mx-5 sm:mx-6" style="height:1px; background: hsl(220 13% 91%);"></div>
+                <div class="px-5 sm:px-6 py-4 sm:py-5">
+                  <p class="text-sm leading-relaxed" style="font-family:'Inter',sans-serif; color: hsl(215 16% 47%); line-height: 1.75;">{item.answer}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+   
+
   </div>
+
+  <style>
+    .faq-item-price:hover {
+      border-color: hsl(107 76% 26% / 0.3) !important;
+      box-shadow: 0 4px 16px hsl(218 30% 9% / 0.1) !important;
+    }
+    .faq-item-price.is-open {
+      border-color: hsl(107 76% 26% / 0.4) !important;
+      box-shadow: 0 4px 20px hsl(218 30% 9% / 0.1) !important;
+    }
+    .faq-item-price.is-open .faq-toggle-price span {
+      color: hsl(107 76% 26%) !important;
+    }
+    .faq-item-price.is-open .faq-toggle-price svg {
+      transform: rotate(180deg);
+    }
+    .faq-toggle-price:hover {
+      background-color: hsl(220 13% 97%) !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .faq-content-price { transition: none !important; }
+    }
+  </style>
 
   <script>
     const API_URL = import.meta.env.PUBLIC_API_URL ?? "http://localhost:8000";
 
-    // ── Elements ───────────────────────────────────────────────────
-    const input        = document.getElementById("gamertagInput")  as HTMLInputElement;
-    const checkBtn     = document.getElementById("checkBtn")       as HTMLButtonElement;
-    const resetBtn     = document.getElementById("resetBtn")       as HTMLButtonElement;
-    const loadingState = document.getElementById("loadingState")   as HTMLElement;
-    const errorState   = document.getElementById("errorState")     as HTMLElement;
-    const errorMsg     = document.getElementById("errorMsg")       as HTMLElement;
-    const results      = document.getElementById("results")        as HTMLElement;
-    const resultTag    = document.getElementById("resultTag")      as HTMLElement;
-    const tierBadge    = document.getElementById("tierBadge")      as HTMLElement;
-    const priceRange   = document.getElementById("priceRange")     as HTMLElement;
-    const scoreValue   = document.getElementById("scoreValue")     as HTMLElement;
-    const scoreBar     = document.getElementById("scoreBar")       as HTMLElement;
-    const breakdownList = document.getElementById("breakdownList") as HTMLElement;
+    const input         = document.getElementById("gamertagInput")  as HTMLInputElement;
+    const checkBtn      = document.getElementById("checkBtn")       as HTMLButtonElement;
+    const resetBtn      = document.getElementById("resetBtn")       as HTMLButtonElement;
+    const loadingState  = document.getElementById("loadingState")   as HTMLElement;
+    const errorState    = document.getElementById("errorState")     as HTMLElement;
+    const errorMsg      = document.getElementById("errorMsg")       as HTMLElement;
+    const results       = document.getElementById("results")        as HTMLElement;
+    const resultTag     = document.getElementById("resultTag")      as HTMLElement;
+    const tierBadge     = document.getElementById("tierBadge")      as HTMLElement;
+    const priceRange    = document.getElementById("priceRange")     as HTMLElement;
+    const scoreValue    = document.getElementById("scoreValue")     as HTMLElement;
+    const scoreBar      = document.getElementById("scoreBar")       as HTMLElement;
+    const breakdownList = document.getElementById("breakdownList")  as HTMLElement;
 
-    // ── Tier styles ────────────────────────────────────────────────
     type Tier = "Legendary" | "Rare" | "Uncommon" | "Common" | "Low Value";
 
     const tierStyles: Record<Tier, { badge: string; bar: string }> = {
-      "Legendary" : {
-        badge : "bg-yellow-500/12 text-yellow-700 border border-yellow-500/25",
-        bar   : "bg-gradient-to-r from-yellow-500 to-yellow-300",
-      },
-      "Rare"      : {
-        badge : "bg-purple-500/12 text-purple-700 border border-purple-500/25",
-        bar   : "bg-gradient-to-r from-purple-500 to-purple-400",
-      },
-      "Uncommon"  : {
-        badge : "bg-blue-500/12 text-blue-700 border border-blue-500/25",
-        bar   : "bg-gradient-to-r from-blue-500 to-blue-400",
-      },
-      "Common"    : {
-        badge : "bg-[#00D02B]/10 text-[#00B324] border border-[#00D02B]/25",
-        bar   : "bg-[#00D02B]",
-      },
-      "Low Value" : {
-        badge : "bg-[#F3F4F6] text-[#6B7280] border border-[#E5E7EB]",
-        bar   : "bg-[#9CA3AF]",
-      },
+      "Legendary" : { badge: "bg-yellow-500/12 text-yellow-700 border border-yellow-500/25", bar: "bg-gradient-to-r from-yellow-500 to-yellow-300" },
+      "Rare"      : { badge: "bg-purple-500/12 text-purple-700 border border-purple-500/25", bar: "bg-gradient-to-r from-purple-500 to-purple-400" },
+      "Uncommon"  : { badge: "bg-blue-500/12 text-blue-700 border border-blue-500/25", bar: "bg-gradient-to-r from-blue-500 to-blue-400" },
+      "Common"    : { badge: "bg-[#00D02B]/10 text-[#00B324] border border-[#00D02B]/25", bar: "bg-[#00D02B]" },
+      "Low Value" : { badge: "bg-[#F3F4F6] text-[#6B7280] border border-[#E5E7EB]", bar: "bg-[#9CA3AF]" },
     };
 
-    // ── Helpers ────────────────────────────────────────────────────
     function showOnly(el: HTMLElement) {
-      [loadingState, errorState, results].forEach((e) =>
-        e.classList.add("hidden")
-      );
+      [loadingState, errorState, results].forEach((e) => e.classList.add("hidden"));
       el.classList.remove("hidden");
     }
 
     function resetTool() {
-      [loadingState, errorState, results].forEach((e) =>
-        e.classList.add("hidden")
-      );
+      [loadingState, errorState, results].forEach((e) => e.classList.add("hidden"));
       input.value = "";
       scoreBar.style.width = "0%";
       input.focus();
     }
 
-    // ── Render ─────────────────────────────────────────────────────
     function renderResults(data: {
       gamertag  : string;
       score     : number;
@@ -274,36 +510,24 @@ const schema = {
       scoreValue.textContent = `${data.score} / 100`;
 
       scoreBar.className = `h-3 rounded-full transition-all duration-700 ease-out ${style.bar}`;
-      setTimeout(() => {
-        scoreBar.style.width = `${data.score}%`;
-      }, 100);
+      setTimeout(() => { scoreBar.style.width = `${data.score}%`; }, 100);
 
       tierBadge.className = `inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold mb-6 ${style.badge}`;
       tierBadge.innerHTML = `${data.emoji} ${data.tier}`;
 
-      breakdownList.innerHTML = data.breakdown
-        .map(
-          (item) => `
-          <div class="flex items-start justify-between py-3 border-b border-[#E5E7EB] last:border-0 gap-4">
-            <div class="flex-1">
-              <p class="text-sm font-bold text-[#111827]">${item.label}</p>
-              <p class="text-xs text-[#9CA3AF] mt-0.5">${item.note}</p>
-            </div>
-            <span class="text-xs font-bold shrink-0 ${
-              item.points > 0
-                ? "text-[#00B324]"
-                : item.points < 0
-                ? "text-red-500"
-                : "text-[#9CA3AF]"
-            }">
-              ${item.points > 0 ? "+" : ""}${item.points} pts
-            </span>
-          </div>`
-        )
-        .join("");
+      breakdownList.innerHTML = data.breakdown.map((item) => `
+        <div class="flex items-start justify-between py-3 border-b border-[#E5E7EB] last:border-0 gap-4">
+          <div class="flex-1">
+            <p class="text-sm font-bold text-[#111827]">${item.label}</p>
+            <p class="text-xs text-[#9CA3AF] mt-0.5">${item.note}</p>
+          </div>
+          <span class="text-xs font-bold shrink-0 ${item.points > 0 ? "text-[#00B324]" : item.points < 0 ? "text-red-500" : "text-[#9CA3AF]"}">
+            ${item.points > 0 ? "+" : ""}${item.points} pts
+          </span>
+        </div>`
+      ).join("");
     }
 
-    // ── Main fetch ─────────────────────────────────────────────────
     async function checkPrice() {
       const tag = input.value.trim();
 
@@ -319,37 +543,57 @@ const schema = {
       try {
         const res = await fetch(`${API_URL}/api/check-price`, {
           method : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept"       : "application/json",
-          },
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
           body: JSON.stringify({ gamertag: tag }),
         });
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(
-            err?.message ?? `Server error (${res.status}). Please try again.`
-          );
+          throw new Error(err?.message ?? `Server error (${res.status}). Please try again.`);
         }
 
         const data = await res.json();
         renderResults(data);
         showOnly(results);
       } catch (err: any) {
-        errorMsg.textContent =
-          err.message ?? "Something went wrong. Please try again.";
+        errorMsg.textContent = err.message ?? "Something went wrong. Please try again.";
         showOnly(errorState);
       } finally {
         checkBtn.disabled = false;
       }
     }
 
-    // ── Events ─────────────────────────────────────────────────────
     checkBtn.addEventListener("click", checkPrice);
     resetBtn.addEventListener("click", resetTool);
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") checkPrice();
-    });
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") checkPrice(); });
+
+    // FAQ accordion
+    function initFaqPrice() {
+      document.querySelectorAll('.faq-toggle-price').forEach(function(btn) {
+        if ((btn as HTMLElement).dataset.bound === 'true') return;
+        (btn as HTMLElement).dataset.bound = 'true';
+        btn.addEventListener('click', function() {
+          const item = (btn as HTMLElement).closest('.faq-item-price');
+          const content = item ? item.querySelector('.faq-content-price') as HTMLElement : null;
+          if (!item || !content) return;
+          const isOpen = item.classList.contains('is-open');
+          document.querySelectorAll('.faq-item-price').forEach(function(el) {
+            el.classList.remove('is-open');
+            const c = el.querySelector('.faq-content-price') as HTMLElement;
+            if (c) c.style.maxHeight = '0';
+            const t = el.querySelector('.faq-toggle-price') as HTMLElement;
+            if (t) t.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('is-open');
+            content.style.maxHeight = content.scrollHeight + 'px';
+            (btn as HTMLElement).setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    }
+
+    initFaqPrice();
+    document.addEventListener('astro:page-load', initFaqPrice);
   </script>
 </MainLayout>
