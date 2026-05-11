@@ -1,11 +1,14 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import Header from "../components/layout/Header.astro";
-import { blogPosts } from "../data/blogPosts";
+import RelatedTools from "../components/blog/RelatedTools.astro";
+import { client, urlFor } from "../lib/sanity";
+import { POST_QUERY, SLUGS_QUERY } from "../lib/queries";
+import { toHTML } from "@portabletext/to-html";
 
 export async function getStaticPaths() {
-  const { blogPosts } = await import("../data/blogPosts");
-  return blogPosts.map((post) => ({ params: { slug: post.slug } }));
+  const posts = await client.fetch(SLUGS_QUERY);
+  return posts.map((post: any) => ({ params: { slug: post.slug } }));
 }
 
 type TocItem = {
@@ -15,14 +18,16 @@ type TocItem = {
 };
 
 const { slug } = Astro.params;
-const post = blogPosts.find((p) => p.slug === slug);
+const post = await client.fetch(POST_QUERY, { slug });
 
 if (!post) {
   return Astro.redirect("/blog");
 }
 
-const relatedPosts = blogPosts.filter((p) => p.slug !== slug).slice(0, 3);
-const articleUrl = `https://xboxgamertaggenerator.com/${post.slug}`;
+const bodyHtml = post.body ? toHTML(post.body) : '';
+const coverImageUrl = post.coverImage
+  ? urlFor(post.coverImage).width(1200).auto('format').url()
+  : null;
 
 const slugify = (text: string) =>
   text
@@ -37,274 +42,518 @@ const slugify = (text: string) =>
 const toc: TocItem[] = [];
 const idCounts = new Map<string, number>();
 
-const contentWithIds = post.content.replace(
+const contentWithIds = bodyHtml.replace(
   /<h([23])>(.*?)<\/h\1>/gi,
-  (_match, level, rawTitle) => {
+  (_match: string, level: string, rawTitle: string) => {
     const plainTitle = rawTitle
       .replace(/<[^>]+>/g, "")
       .replace(/&amp;/g, "&")
       .trim();
-
     const baseId = slugify(plainTitle) || `section-${toc.length + 1}`;
     const count = (idCounts.get(baseId) ?? 0) + 1;
     idCounts.set(baseId, count);
-
     const finalId = count > 1 ? `${baseId}-${count}` : baseId;
-
-    toc.push({
-      id: finalId,
-      title: plainTitle,
-      level: Number(level),
-    });
-
+    toc.push({ id: finalId, title: plainTitle, level: Number(level) });
     return `<h${level} id="${finalId}">${rawTitle}</h${level}>`;
   }
 );
 
-const relatedTools = [
-  {
-    title: "Xbox Gamertag Generator",
-    description: "Generate unique Xbox gamertags instantly with our AI-powered tool.",
-    href: "/",
-  },
-  {
-    title: "Availability Checker",
-    description: "Check if your desired gamertag is still available before someone else takes it.",
-    href: "/xbox-gamertag-availability-checker",
-  },
-];
+const articleUrl = `https://xboxgamertaggenerator.com/${slug}`;
+
+const h2Items = toc.filter(item => item.level === 2 && item.title.trim() !== '');
 
 const schema = {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
+  "@type": post.seo?.articleType || "BlogPosting",
   headline: post.title,
   url: articleUrl,
-  description: post.excerpt,
+  description: post.seo?.metaDescription || post.excerpt,
+  image: coverImageUrl,
+  datePublished: post.publishedAt,
+  dateModified: post.updatedAt || post.publishedAt,
   author: {
+    "@type": "Person",
+    name: post.author?.name || "Xbox Gamertag Generator",
+  },
+  publisher: {
     "@type": "Organization",
     name: "Xbox Gamertag Generator",
+    url: "https://xboxgamertaggenerator.com",
   },
 };
 ---
 
 <MainLayout
-  title={`${post.title} | Xbox Gamertag Guide`}
-  description={post.excerpt}
-  canonical={articleUrl}
+  title={post.seo?.metaTitle || `${post.title} | Xbox Gamertag Guide`}
+  description={post.seo?.metaDescription || post.excerpt}
+  canonical={post.seo?.canonicalUrl || articleUrl}
   ogType="article"
   {schema}
 >
   <Header />
 
-  <div class="min-h-screen bg-gray-100 font-ui">
-    <!-- Hero Section -->
-    <section class="pt-5 pb-5 sm:pt-6 sm:pb-6 md:pt-8 md:pb-8 bg-white">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white rounded-lg p-8 sm:p-12 text-center shadow-sm">
-          <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900">
-            {post.title}
-          </h1>
+  <div class="min-h-screen bg-gray-50 font-ui">
 
-          <p class="text-base sm:text-lg md:text-xl text-gray-700 mb-6 max-w-3xl mx-auto">
+    <!-- Hero -->
+    <section class="bg-white border-b border-white-border">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        {post.categories && post.categories.length > 0 && (
+          <div class="flex flex-wrap gap-2 justify-center mb-5">
+            {post.categories.map((cat: any) => (
+              
+               <a href={`/blog/category/${cat.slug}`}
+                class="badge-brand hover:opacity-80 transition-opacity"
+              >
+                {cat.name}
+              </a>
+            ))}
+          </div>
+        )}
+
+        <h1
+          class="text-2xl sm:text-3xl md:text-4xl font-bold text-center leading-tight mb-5 text-dark-heading"
+          style="letter-spacing: -0.02em;"
+        >
+          {post.title}
+        </h1>
+
+        {post.excerpt && (
+          <p class="text-center text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed text-dark-body">
             {post.excerpt}
           </p>
+        )}
 
-          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-gray-600">
-            <div class="flex items-center gap-2">
-              <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-dark-body">
+          {post.author && (
+            <div class="flex items-center gap-1.5">
+              <svg class="h-4 w-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A10.966 10.966 0 0112 15c2.125 0 4.109.602 5.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span>By Xbox Gamertag Generator</span>
+              <span>By <strong class="font-semibold text-dark-heading">{post.author.name}</strong></span>
             </div>
-
-            <div class="flex items-center gap-2">
-              <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          )}
+          {post.publishedAt && (
+            <div class="flex items-center gap-1.5">
+              <svg class="h-4 w-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <span>{post.readTime}</span>
+              <span>{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
             </div>
-          </div>
+          )}
+          {post.readingTime && (
+            <div class="flex items-center gap-1.5">
+              <svg class="h-4 w-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0.11-18 0 9 9 0z" />
+              </svg>
+              <span>{post.readingTime} min read</span>
+            </div>
+          )}
+          {post.updatedAt && (
+            <div class="flex items-center gap-1.5">
+              <svg class="h-4 w-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>Updated {new Date(post.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+            </div>
+          )}
         </div>
       </div>
     </section>
 
-    <!-- Featured Image -->
-    <section class="px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 pt-[20px] pb-[35px] bg-white">
-      <div class="max-w-4xl mx-auto">
-        <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg bg-gray-200">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="text-center">
-              <div class="text-4xl mb-2">🎮</div>
-              <p class="text-sm text-gray-500 font-medium">Article Image Placeholder</p>
-            </div>
+    <!-- Cover Image -->
+    {coverImageUrl && (
+      <div class="bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+          <div class="rounded-xl overflow-hidden shadow-md border border-white-border">
+            <img
+              src={coverImageUrl}
+              alt={post.coverImage?.alt || post.title}
+              class="w-full object-cover max-h-[480px]"
+              loading="eager"
+            />
           </div>
         </div>
       </div>
-    </section>
+    )}
 
-    <!-- Main Content with Right Ad -->
-    <div class="bg-gray-100 min-h-screen pt-2 pb-0">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-0">
-        <div class="flex flex-col lg:flex-row gap-8">
-          <!-- Main Article Content -->
-          <main class="flex-1 max-w-none order-1 lg:order-1">
-            <!-- Mobile & Tablet Ad Banner -->
-            <div class="lg:hidden">
-              <div class="bg-gray-100 rounded-lg p-4 text-center border-2 border-dashed border-gray-300 mb-6 mt-2">
-                <p class="text-xs text-gray-500">Advertisement</p>
-                <div class="h-32 bg-gray-200 rounded mt-2"></div>
-              </div>
-            </div>
+    <!-- Main Layout -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col lg:flex-row gap-8 items-start">
 
-            <div class="bg-white rounded-t-lg shadow-sm pb-12 min-h-screen my-0 py-[15px]">
-              <article class="p-6 sm:p-8">
-                {toc.length > 0 && (
-                  <div class="mb-8">
-                    <details class="bg-white rounded-lg shadow-sm border border-gray-200" open>
-                      <summary class="list-none p-5 border-b border-gray-100 cursor-pointer">
-                        <div class="w-full flex items-center justify-between text-lg font-semibold text-gray-800 hover:text-brand transition-colors">
-                          <div class="flex items-center gap-2">
-                            <svg class="h-5 w-5 text-brand" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                            Table of Contents
-                          </div>
+        <!-- TOC Sidebar — desktop only -->
+        {toc.length > 0 && (
+      <aside class="hidden lg:block w-72 flex-shrink-0 sticky top-6">
+  <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+    <div class="flex items-center gap-2 px-5 py-4 border-b border-gray-100">
+      <svg class="h-4 w-4 text-brand flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+      </svg>
+      <span class="text-sm font-semibold text-gray-900">Table of Contents</span>
+    </div>
+    <nav class="px-4 py-4 toc-scroll">
+      <ol class="space-y-0.5">
+        {(() => {
+          let h2Count = 0;
+          const items = toc.filter(item => item.title.trim() !== '');
 
-                          <svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                          </svg>
-                        </div>
-                      </summary>
+          return items.map((item) => {
+            if (item.level === 3) return null;
 
-                      <nav class="p-5">
-                        <ul class="space-y-2">
-                          {toc.map((item) => (
-                            <li>
-                              <a
-                                href={`#${item.id}`}
-                                class:list={[
-                                  "block text-sm transition-colors hover:text-brand",
-                                  item.level === 3
-                                    ? "pl-4 text-gray-600"
-                                    : "text-gray-700 font-medium"
-                                ]}
-                              >
-                                {item.title}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </nav>
-                    </details>
-                  </div>
-                )}
+            h2Count++;
+            const num = h2Count;
 
-                <div
-                  class="
-                    prose prose-lg max-w-none
-                    prose-p:text-gray-700 prose-p:leading-8 prose-p:mb-5
-                    prose-headings:font-ui
-                    prose-h2:text-brand prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-10 prose-h2:mb-4
-                    prose-h3:text-gray-800 prose-h3:text-xl prose-h3:font-bold prose-h3:mt-8 prose-h3:mb-3
-                    prose-strong:text-gray-900 prose-strong:font-semibold
-                    prose-a:text-brand prose-a:no-underline hover:prose-a:underline
-                    prose-li:text-gray-700
-                    prose-ul:my-4 prose-ol:my-4
-                    prose-blockquote:border-l-[#00D02B] prose-blockquote:text-gray-600
-                    prose-code:text-[#00A021] prose-code:bg-gray-100 prose-code:rounded prose-code:px-1.5 prose-code:py-0.5
-                    prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:border prose-pre:border-gray-700
-                    prose-hr:border-gray-200
-                  "
-                  set:html={contentWithIds}
-                />
-              </article>
+            const h3Children = items.filter((t, i) => {
+              const currentIndex = items.indexOf(item);
+              const nextH2Index = items.findIndex((t2, i2) => i2 > currentIndex && t2.level === 2);
+              return t.level === 3 && i > currentIndex && (nextH2Index === -1 || i < nextH2Index);
+            });
 
-              <!-- Call to Action -->
-              <div class="bg-brand rounded-lg p-6 text-center text-white m-6">
-                <h3 class="text-xl font-bold mb-2">Ready to Create Your Gamertag?</h3>
-                <p class="mb-4">
-                  Use our free Xbox Gamertag Generator to find the perfect name for your gaming identity.
-                </p>
-                <a
-                  href="/"
-                  class="inline-flex items-center justify-center bg-white text-brand hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors"
-                >
-                  Try Generator Now
-                </a>
-              </div>
+            const hasChildren = h3Children.length > 0;
+            const groupId = `desktop-h3-${item.id}`;
 
-              <!-- Related Posts -->
-              {relatedPosts.length > 0 && (
-                <section class="p-6 sm:p-8 border-t border-gray-200">
-                  <h2 class="text-2xl font-bold text-gray-800 mb-6">Related Posts</h2>
+            return (
+              <li>
+                <div class="flex items-center gap-1">
+                  
+                    <a href={`#${item.id}`}
+                    class="toc-link flex-1 flex items-center gap-2 py-1.5 px-2 rounded-lg text-sm font-medium text-gray-700 hover:text-brand hover:bg-gray-50 transition-all"
+                    data-section={item.id}
+                  >
+                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-brand text-white font-bold flex-shrink-0 text-[10px]">
+                      {num}
+                    </span>
+                    <span class="leading-snug">{item.title}</span>
+                  </a>
 
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {relatedPosts.map((relatedPost) => (
-                      <a
-                        href={`/${relatedPost.slug}`}
-                        class="bg-gray-50 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow group"
-                      >
-                        <div class="h-40 bg-gray-200 flex items-center justify-center">
-                          <span class="text-gray-500 text-sm">Gaming Image Placeholder</span>
-                        </div>
-
-                        <div class="p-4">
-                          <h3 class="font-semibold text-gray-800 mb-2 group-hover:text-brand transition-colors">
-                            {relatedPost.title}
-                          </h3>
-                          <p class="text-sm text-gray-600">{relatedPost.readTime}</p>
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              <!-- Ad Banner after Related Posts -->
-              <div class="m-6 bg-gray-100 rounded-lg p-6 text-center border-2 border-dashed border-gray-300">
-                <p class="text-sm text-gray-500 mb-2">Advertisement</p>
-                <div class="h-32 bg-gray-200 rounded"></div>
-              </div>
-
-              <!-- Related Tools -->
-              <section class="p-6 sm:p-8 border-t border-gray-200">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Related Tools</h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {relatedTools.map((tool) => (
-                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                      <h3 class="text-xl font-bold mb-2 text-brand">{tool.title}</h3>
-                      <p class="text-gray-600 mb-4">{tool.description}</p>
-                      <a
-                        href={tool.href}
-                        class="inline-flex items-center justify-center bg-brand hover:bg-brand-light text-white font-semibold px-5 py-3 rounded-lg transition-colors"
-                      >
-                        Go to Tool
-                      </a>
-                    </div>
-                  ))}
+                  {hasChildren && (
+                    <button
+                      class="desktop-h3-toggle p-1.5 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0"
+                      data-target={groupId}
+                      aria-expanded="false"
+                    >
+                      <svg class="h-3.5 w-3.5 text-gray-400 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
-              </section>
 
-              <!-- Bottom Ad Space -->
-              <div class="mx-6 mt-6 mb-0 bg-gray-100 rounded-lg p-6 text-center border-2 border-dashed border-gray-300">
-                <p class="text-sm text-gray-500 mb-2">Advertisement</p>
-                <div class="h-32 bg-gray-200 rounded"></div>
-              </div>
-            </div>
-          </main>
+                {hasChildren && (
+                  <ol id={groupId} class="hidden mt-0.5 space-y-0.5 pl-7">
+                    {h3Children.map((h3) => (
+                      <li>
+                        
+                         <a href={`#${h3.id}`}
+                          class="toc-link flex items-center gap-2 py-1 px-2 rounded-lg text-xs text-gray-500 hover:text-brand hover:bg-gray-50 transition-all"
+                          data-section={h3.id}
+                        >
+                          <span class="inline-block w-1 h-1 rounded-full bg-gray-300 flex-shrink-0"></span>
+                          <span class="leading-snug">{h3.title}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </li>
+            );
+          });
+        })()}
+      </ol>
+    </nav>
+  </div>
+</aside>
+        )}
 
-          <!-- Sticky Ad Space - Desktop Sidebar on Right -->
-          <aside class="hidden lg:block lg:w-64 flex-shrink-0 order-2 lg:order-2">
-            <div class="sticky top-4 space-y-6 transition-all duration-200 my-0 py-[50px]">
-              <div class="bg-gray-100 rounded-lg p-4 text-center border-2 border-dashed border-gray-300">
-                <p class="text-xs text-gray-500">Advertisement</p>
-                <div class="h-64 bg-gray-200 rounded mt-2"></div>
-              </div>
-            </div>
-          </aside>
+        <!-- Main Article Column -->
+        <main class="flex-1 min-w-0">
+<!-- Mobile TOC -->
+{toc.length > 0 && (
+  <div class="lg:hidden mb-6">
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+      <button
+        id="mobileTocBtn"
+        class="w-full flex items-center justify-between px-5 py-4 text-sm font-semibold text-gray-900"
+      >
+        <div class="flex items-center gap-2">
+          <svg class="h-4 w-4 text-brand" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+          </svg>
+          Table of Contents
         </div>
+        <svg id="mobileTocArrow" class="h-4 w-4 text-gray-400 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      <div id="mobileTocContent" class="hidden border-t border-gray-100">
+        <nav class="px-4 py-4">
+          <ol class="space-y-0.5">
+            {(() => {
+              let h2Count = 0;
+              const items = toc.filter(item => item.title.trim() !== '');
+
+              return items.map((item, index) => {
+                if (item.level === 3) return null;
+
+                h2Count++;
+                const num = h2Count;
+
+                const h3Children = items.filter((t, i) => {
+                  const currentIndex = items.indexOf(item);
+                  const nextH2Index = items.findIndex((t2, i2) => i2 > currentIndex && t2.level === 2);
+                  return t.level === 3 && i > currentIndex && (nextH2Index === -1 || i < nextH2Index);
+                });
+
+                const hasChildren = h3Children.length > 0;
+                const groupId = `mobile-h3-${item.id}`;
+
+                return (
+                  <li>
+                    <div class="flex items-center gap-1">
+                      
+                      <a  href={`#${item.id}`}
+                        class="flex-1 flex items-center gap-2 py-1.5 px-2 rounded-lg text-sm font-medium text-gray-700 hover:text-brand transition-colors"
+                      >
+                        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-brand text-white font-bold flex-shrink-0 text-[10px]">
+                          {num}
+                        </span>
+                        {item.title}
+                      </a>
+
+                      {hasChildren && (
+                        <button
+                          class="mobile-h3-toggle p-1.5 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0"
+                          data-target={groupId}
+                          aria-expanded="false"
+                        >
+                          <svg class="h-3.5 w-3.5 text-gray-400 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+
+                    {hasChildren && (
+                      <ol id={groupId} class="hidden mt-0.5 space-y-0.5 pl-7">
+                        {h3Children.map((h3) => (
+                          <li>
+                            
+                             <a href={`#${h3.id}`}
+                              class="flex items-center gap-2 py-1 px-2 rounded-lg text-xs text-gray-500 hover:text-brand transition-colors"
+                            >
+                              <span class="inline-block w-1 h-1 rounded-full bg-gray-300 flex-shrink-0"></span>
+                              {h3.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </li>
+                );
+              });
+            })()}
+          </ol>
+        </nav>
       </div>
     </div>
   </div>
+)}
+
+          <!-- Article Card -->
+          <div class="rounded-xl shadow-sm overflow-hidden bg-white">
+
+            <!-- Article Body -->
+            <article class="px-6 sm:px-8 py-8">
+              <div class="blog-content" set:html={contentWithIds} />
+            </article>
+
+            <!-- CTA -->
+            <div class="mx-6 sm:mx-8 mb-8 rounded-xl p-6 sm:p-8 text-center text-white bg-brand">
+              <div class="text-2xl mb-2">🎮</div>
+              <h3 class="text-xl font-bold mb-2">Ready to Create Your Gamertag?</h3>
+              <p class="mb-5 text-sm max-w-sm mx-auto leading-relaxed opacity-95">
+                Use our free Xbox Gamertag Generator to find the perfect name for your gaming identity.
+              </p>
+              
+               <a href="/"
+                class="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-lg text-sm bg-white text-brand hover:bg-white-subtle transition-colors"
+              >
+                Try Generator Now
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+
+            <!-- Related Posts -->
+            <div class="px-6 sm:px-8 pb-8 pt-6 border-t border-white-border">
+              <h2 class="text-lg font-bold mb-3 text-dark-heading">Related Posts</h2>
+              <p class="text-sm text-dark-body">More articles coming soon.</p>
+            </div>
+
+            <!-- Mid Ad -->
+            <div class="mx-6 sm:mx-8 mb-8 rounded-lg p-5 text-center border-2 border-dashed border-white-border bg-white-subtle">
+              <p class="text-xs font-bold tracking-widest uppercase mb-2 text-dark-body">Advertisement</p>
+              <div class="rounded h-24 bg-white-border"></div>
+            </div>
+
+            <!-- Related Tools -->
+            <div class="px-6 sm:px-8 pb-8 pt-6 border-t border-white-border">
+              <RelatedTools />
+            </div>
+
+            <!-- Bottom Ad -->
+            <div class="mx-6 sm:mx-8 mb-8 rounded-lg p-5 text-center border-2 border-dashed border-white-border bg-white-subtle">
+              <p class="text-xs font-bold tracking-widest uppercase mb-2 text-dark-body">Advertisement</p>
+              <div class="rounded h-24 bg-white-border"></div>
+            </div>
+
+            <!-- Tags -->
+            {post.tags && post.tags.length > 0 && (
+              <div class="px-6 sm:px-8 pb-6 pt-4 border-t border-white-border">
+                <p class="text-xs font-bold tracking-widest uppercase mb-3 text-dark-body">Tags</p>
+                <div class="flex flex-wrap gap-2">
+                  {post.tags.map((tag: any) => (
+                    <span class="text-xs px-3 py-1 rounded-full font-medium bg-white-subtle text-dark-heading border border-white-border">
+                      #{tag.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <!-- Share -->
+            <div class="px-6 sm:px-8 pb-8 pt-4 border-t border-white-border">
+              <p class="text-xs font-bold tracking-widest uppercase mb-3 text-dark-body">Share this article</p>
+              <div class="flex flex-col sm:flex-row gap-3">
+                
+                 <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(articleUrl)}&text=${encodeURIComponent(post.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex-1 flex items-center justify-center gap-2 text-sm font-semibold px-5 py-3 rounded-lg bg-white-subtle text-dark-heading border border-white-border hover:border-brand transition-colors"
+                >
+                  <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.736-8.861L2.25 2.25H8.08l4.254 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                  Share on X
+                </a>
+                
+                  <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex-1 flex items-center justify-center gap-2 text-sm font-semibold px-5 py-3 rounded-lg bg-white-subtle text-dark-heading border border-white-border hover:border-brand transition-colors"
+                >
+                  <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                  Share on Facebook
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </main>
+
+      </div>
+    </div>
+  </div>
+
 </MainLayout>
+
+<script>
+  // Mobile TOC toggle
+  const mobileTocBtn = document.getElementById('mobileTocBtn');
+  const mobileTocContent = document.getElementById('mobileTocContent');
+  const mobileTocArrow = document.getElementById('mobileTocArrow');
+
+  if (mobileTocBtn && mobileTocContent && mobileTocArrow) {
+    mobileTocBtn.addEventListener('click', () => {
+      const isOpen = !mobileTocContent.classList.contains('hidden');
+      if (isOpen) {
+        mobileTocContent.classList.add('hidden');
+        (mobileTocArrow as unknown as SVGElement).style.transform = 'rotate(0deg)';
+      } else {
+        mobileTocContent.classList.remove('hidden');
+        (mobileTocArrow as unknown as SVGElement).style.transform = 'rotate(180deg)';
+      }
+    });
+  }
+
+  // Mobile H3 dropdowns
+  document.querySelectorAll('.mobile-h3-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      if (!targetId) return;
+      const target = document.getElementById(targetId);
+      const arrow = btn.querySelector('svg');
+      if (!target || !arrow) return;
+
+      const isOpen = !target.classList.contains('hidden');
+      if (isOpen) {
+        target.classList.add('hidden');
+        arrow.style.transform = 'rotate(0deg)';
+        btn.setAttribute('aria-expanded', 'false');
+      } else {
+        target.classList.remove('hidden');
+        arrow.style.transform = 'rotate(180deg)';
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // Active TOC link on scroll
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const sections = document.querySelectorAll('h2[id], h3[id]');
+
+  function setActiveLink(id: string) {
+    tocLinks.forEach(link => {
+      const section = link.getAttribute('data-section');
+      if (section === id) {
+        link.classList.add('text-brand', 'bg-gray-50');
+        link.classList.remove('text-gray-700', 'text-gray-500');
+      } else {
+        link.classList.remove('text-brand', 'bg-gray-50');
+        if (link.classList.contains('text-xs')) {
+          link.classList.add('text-gray-500');
+        } else {
+          link.classList.add('text-gray-700');
+        }
+      }
+    });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveLink(entry.target.id);
+        }
+      });
+    },
+    { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
+  );
+
+  sections.forEach(section => observer.observe(section));
+
+  // Desktop H3 dropdowns
+document.querySelectorAll('.desktop-h3-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetId = btn.getAttribute('data-target');
+    if (!targetId) return;
+    const target = document.getElementById(targetId);
+    const arrow = btn.querySelector('svg');
+    if (!target || !arrow) return;
+
+    const isOpen = !target.classList.contains('hidden');
+    if (isOpen) {
+      target.classList.add('hidden');
+      arrow.style.transform = 'rotate(0deg)';
+      btn.setAttribute('aria-expanded', 'false');
+    } else {
+      target.classList.remove('hidden');
+      arrow.style.transform = 'rotate(180deg)';
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+</script>

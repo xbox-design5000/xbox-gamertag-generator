@@ -1,7 +1,20 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import Header from "../components/layout/Header.astro";
-import { blogPosts } from "../data/blogPosts";
+import { client } from "../lib/sanity";
+import { POSTS_QUERY } from "../lib/queries";
+import { urlFor } from "../lib/sanity";
+
+const sanityPosts = await client.fetch(POSTS_QUERY);
+
+const blogPosts = sanityPosts.map((post: any) => ({
+  id: post.slug,
+  title: post.title,
+  excerpt: post.excerpt ?? '',
+  readTime: post.readingTime ? `${post.readingTime} min read` : '5 min read',
+slug: post.slug,
+  coverImage: post.featuredImage ? urlFor(post.featuredImage).width(600).height(400).fit('crop').auto('format').url() : null,
+}));
 
 const postsPerPage = 6;
 const totalPages = Math.max(1, Math.ceil(blogPosts.length / postsPerPage));
@@ -92,13 +105,6 @@ const schema = {
 </button>
         </div>
 
-        <!-- Ad slot -->
-        <div class="bg-[#F3F4F6] border border-dashed border-[#D1D5DB] rounded-lg px-5 py-4 text-center mt-8">
-          <p class="font-ui text-[10px] font-bold tracking-[3px] uppercase text-[#94A3B8] mb-3">
-            Advertisement
-          </p>
-          <div class="bg-[#E5E7EB] rounded h-20 md:h-32 lg:h-40"></div>
-        </div>
       </div>
     </section>
 
@@ -137,41 +143,41 @@ const schema = {
       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       data-posts={JSON.stringify(blogPosts)}
     >
-   {blogPosts.slice(0, postsPerPage).map((post) => (
+    {blogPosts.slice(0, postsPerPage).map((post) => (
   <article class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-    <div class="w-full h-40 bg-gray-300 flex items-center justify-center">
-      <span class="text-gray-500 text-sm font-ui">Gaming Image Placeholder</span>
-    </div>
-
+    {post.coverImage
+      ? <img src={post.coverImage} alt={post.title} class="w-full h-40 object-cover" />
+      : <div class="w-full h-40 bg-gray-300 flex items-center justify-center">
+          <span class="text-gray-500 text-sm font-ui">Gaming Image Placeholder</span>
+        </div>
+    }
     <div class="p-4">
       <a href={`/${post.slug}`} class="block group">
         <h3 class="text-lg font-semibold mb-2 text-gray-800 font-ui line-clamp-2 group-hover:text-brand transition-colors">
           {post.title}
         </h3>
       </a>
-
       <p class="text-gray-600 mb-3 text-sm font-ui line-clamp-4">
         {post.excerpt}
       </p>
-
-    <a
-  href={`/${post.slug}`}
-  class="text-brand font-medium hover:underline inline-flex items-center font-ui mt-auto"
-  aria-label={`Read more about ${post.title}`}
->
-  <span>Read more</span>
-  <span class="sr-only"> about {post.title}</span>
-  <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-  </svg>
-</a>
-
+      
+      <a  href={`/${post.slug}`}
+        class="text-brand font-medium hover:underline inline-flex items-center font-ui mt-auto"
+        aria-label={`Read more about ${post.title}`}
+      >
+        <span>Read more</span>
+        <span class="sr-only"> about {post.title}</span>
+        <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
     </div>
   </article>
 ))}
     </div>
   </div>
 </section>
+
 <!-- Pagination -->
 <section class="section-white-subtle pb-10">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12">
@@ -220,14 +226,16 @@ const schema = {
   </div>
 
 <script>
-  type Post = {
-    id: string;
-    title: string;
-    excerpt: string;
-    readTime: string;
-    slug: string;
-  };
+ type Post = {
+  id: string;
+  title: string;
+  excerpt: string;
+  readTime: string;
+  slug: string;
+  coverImage?: string | null;
+};
 
+  
   function setupBlogPage() {
     const gridEl = document.getElementById("blogGrid");
   const sectionTitleEl = document.getElementById("sectionTitle");
@@ -278,6 +286,7 @@ const schema = {
   const pageNumbers = pageNumbersEl;
   const paginationWrap = paginationWrapEl;
     const posts: Post[] = JSON.parse(grid.dataset.posts ?? "[]");
+    console.log('First post coverImage:', posts[0]?.coverImage);
     const postsPerPage = Number(paginationWrap.dataset.postsPerPage ?? "6");
 
     let currentPosts: Post[] = [...posts];
@@ -286,27 +295,27 @@ const schema = {
     function getTotalPages(list: Post[]): number {
       return Math.max(1, Math.ceil(list.length / postsPerPage));
     }
-
 function cardHTML(post: Post): string {
+  const imageHTML = post.coverImage
+    ? `<img src="${post.coverImage}" alt="${post.title}" class="w-full h-40 object-cover" />`
+    : `<div class="w-full h-40 bg-gray-300 flex items-center justify-center">
+        <span class="text-gray-500 text-sm font-ui">Gaming Image Placeholder</span>
+       </div>`;
+
   return `
     <article class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
-      <div class="w-full h-40 bg-gray-300 flex items-center justify-center">
-        <span class="text-gray-500 text-sm font-ui">Gaming Image Placeholder</span>
-      </div>
-
+      ${imageHTML}
       <div class="p-4 flex flex-col flex-1">
         <a href="/${post.slug}" class="block group">
           <h3 class="text-lg font-semibold mb-2 text-gray-800 font-ui line-clamp-2 group-hover:text-brand transition-colors">
             ${post.title}
           </h3>
         </a>
-
         <p class="text-gray-600 mb-3 text-sm font-ui line-clamp-4">
           ${post.excerpt}
         </p>
-
-        <a
-          href="/${post.slug}"
+        
+          <a href="/${post.slug}"
           class="text-brand font-medium hover:underline inline-flex items-center font-ui mt-auto"
           aria-label="Read more about ${post.title}"
         >
@@ -488,5 +497,8 @@ function cardHTML(post: Post): string {
   }
 
   document.addEventListener("astro:page-load", setupBlogPage);
+
+ 
+
 </script>
 </MainLayout>

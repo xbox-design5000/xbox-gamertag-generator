@@ -1,6 +1,8 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
+import react from "@astrojs/react";
+import sanity from "@sanity/astro";
 
 const toolPages = new Set([
   "/gamertag-price-checker",
@@ -37,10 +39,19 @@ export default defineConfig({
   },
 
   integrations: [
+    react(),
+  sanity({
+  projectId: 'ezhha3lz',
+  dataset: 'production',
+  useCdn: false,
+  apiVersion: '2025-05-11',
+  studioBasePath: '/studio',
+}),
     sitemap({
       filter: (page) =>
         !page.includes("/api/") &&
-        !page.includes("/admin/"),
+        !page.includes("/admin/") &&
+        !page.includes("/studio/"),
 
       serialize(item) {
         const path = new URL(item.url).pathname.replace(/\/$/, "") || "/";

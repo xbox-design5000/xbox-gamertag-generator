@@ -1,0 +1,76 @@
+---
+const tools = [
+  {
+    title: 'Xbox Gamertag Generator',
+    description: 'Generate cool, funny, short, and unique Xbox gamertag ideas instantly.',
+    url: 'https://xboxgamertaggenerator.com/',
+    linkText: 'Generate Xbox gamertag ideas',
+  },
+  {
+    title: 'Xbox Gamertag Availability Checker',
+    description: 'Check whether an Xbox gamertag may be available or already taken.',
+    url: 'https://xboxgamertaggenerator.com/xbox-gamertag-availability-checker',
+    linkText: 'Check Xbox gamertag availability',
+  },
+  {
+    title: 'Xbox Gamertag Search',
+    description: 'Look up public Xbox profile details, Gamerscore, and game activity by gamertag.',
+    url: 'https://xboxgamertaggenerator.com/xbox-gamertag-search',
+    linkText: 'Search an Xbox profile by gamertag',
+  },
+  {
+    title: 'Xbox Gamercard Generator',
+    description: 'Create a custom Xbox-style profile card with your gamertag, avatar, and Gamerscore.',
+    url: 'https://xboxgamertaggenerator.com/gamercard-generator',
+    linkText: 'Create a custom Xbox gamercard',
+  },
+  {
+    title: 'Xbox Gamertag Price Checker',
+    description: 'Estimate whether a gamertag may be rare, short, or potentially valuable.',
+    url: 'https://xboxgamertaggenerator.com/gamertag-price-checker',
+    linkText: 'Estimate your Xbox gamertag value',
+  },
+  {
+    title: 'Xbox Gamertag Optimizer',
+    description: 'Shorten, clean, and rewrite weak or messy Xbox gamertags into better options.',
+    url: 'https://xboxgamertaggenerator.com/gamertag-optimizer',
+    linkText: 'Optimize your Xbox gamertag',
+  },
+];
+---
+
+<div>
+  <h2 class="text-xl font-bold mb-1" style="color: hsl(218 30% 9%);">
+    Related Xbox Gamertag Tools
+  </h2>
+  <p class="text-sm mb-5" style="color: hsl(215 16% 47%);">
+    After reading, explore our other free Xbox tools to complete your gaming identity.
+  </p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    {tools.map(tool => (
+      
+       <a href={tool.url}
+        class="group block rounded-lg p-4 transition-all duration-200"
+        style="background-color: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%);"
+        onmouseover="this.style.borderColor='hsl(107 76% 30% / 0.4)'; this.style.backgroundColor='hsl(107 76% 26% / 0.04)'"
+        onmouseout="this.style.borderColor='hsl(220 13% 91%)'; this.style.backgroundColor='hsl(220 14% 96%)'"
+      >
+        <div class="flex items-start justify-between gap-2 mb-1">
+          <h3 class="text-sm font-semibold leading-snug" style="color: hsl(218 30% 9%);">
+            {tool.title}
+          </h3>
+          <svg class="h-4 w-4 flex-shrink-0 mt-0.5" style="color: hsl(107 76% 30%);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+        <p class="text-xs leading-relaxed" style="color: hsl(215 16% 47%);">
+          {tool.description}
+        </p>
+       <span class="inline-block mt-2 text-xs font-semibold underline underline-offset-2" style="color: hsl(107 76% 30%);">
+  {tool.linkText} →
+</span>
+      </a>
+    ))}
+  </div>
+</div>
