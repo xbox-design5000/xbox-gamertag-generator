@@ -2,76 +2,67 @@
 const faqItems = [
   {
     id: "1",
-    question: "What Is an Xbox Gamertag?",
-    answer: `An Xbox gamertag is your public username on Xbox. It is the name other players see on your profile, in multiplayer lobbies, on leaderboards, friend lists, and across Xbox Live.
-
-Your gamertag is a big part of your gaming identity. A clean and memorable name can make a stronger first impression, while a messy or hard-to-read tag is easier to forget.
-
-That is why choosing the right Xbox name matters. A good gamertag should be easy to read, easy to remember, and a good fit for your style.`
-  },
-  {
-    id: "2",
     question: "How Do I Make a Good Xbox Gamertag?",
     answer: `Choose a name that is short, readable, memorable, and matched to your gaming style. Avoid names that are too long, confusing, or filled with random numbers unless that is the style you want.
 
 The best names are easy to say out loud, easy to remember after a few minutes, and a good fit for how you want to appear in lobbies, on leaderboards, and across your Xbox profile.`
   },
   {
-    id: "3",
+    id: "2",
     question: "Can This Generator Create Funny Xbox Gamertags?",
     answer: `Yes. Select the funny style or a playful theme when generating to get funny Xbox gamertag ideas. You can also filter by gender and language to narrow your results.
 
 Many players like tags that are funny, clever, or a little absurd — as long as they are still clean and easy to read. The generator gives you options across all styles so you can find the right tone for your gaming identity.`
   },
   {
-    id: "4",
+    id: "3",
     question: "Should I Check Availability After Generating a Name?",
-    answer: `Yes. After choosing a name you like, use the Xbox Gamertag Availability Checker to see if it may still be available. If the base name is already taken, Xbox may add a number suffix to keep the full gamertag unique.
+    answer: `Yes. After choosing a name you like, use our <a href="/xbox-gamertag-availability-checker" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Xbox Gamertag Availability Checker</a> to see if it may still be available. If the base name is already taken, Xbox may add a number suffix to keep the full gamertag unique.
 
 Checking availability before committing to a name saves you from going through the change process twice.`
   },
   {
-    id: "5",
+    id: "4",
     question: "What Are the Current Xbox Gamertag Rules?",
     answer: `Modern Xbox gamertags use a base-name system. The base gamertag can be up to 12 characters long, and spaces count toward that limit.
 
-If another player already uses the same base name, Xbox may add a numeric suffix to help keep the full gamertag unique. It is also smart to avoid offensive terms, impersonation, and overly messy formatting when choosing a name.`
+If another player already uses the same base name, Xbox may add a numeric suffix to help keep the full gamertag unique. Read our full <a href="/xbox-gamertag-rules" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Xbox Gamertag Rules</a> guide for the complete breakdown of what is and is not allowed.`
   },
   {
-    id: "6",
+    id: "5",
     question: "How Do I Claim a New Xbox Gamertag?",
     answer: `Once you find a name you like, you can change your Xbox gamertag through your Xbox console, the Xbox app, or your Microsoft account settings on the web.
 
-Your first gamertag change is free. After that, additional changes may require a fee depending on your region.`
+Your first gamertag change is free. After that, additional changes may require a fee depending on your region. Use our <a href="/xbox-gamertag-availability-checker" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Xbox Gamertag Availability Checker</a> to confirm your new name is available before making the change.`
   },
   {
-    id: "7",
+    id: "6",
     question: "Why Can My Xbox Gamertag Only Be 12 Characters?",
     answer: `Xbox limits gamertags to 12 characters to keep names short, readable, and consistent across all Xbox profiles, leaderboards, and game interfaces.
 
-This limit applies to the base name and does not include any suffix numbers Xbox may add automatically.`
+This limit applies to the base name and does not include any suffix numbers Xbox may add automatically. Use the character limit slider in the generator above to get name ideas within a specific length range.`
   },
   {
-    id: "8",
+    id: "7",
     question: "Are Xbox Gamertags Free?",
     answer: `Yes. Creating an Xbox gamertag is free with a Microsoft account. Your first gamertag change is also free. After that, changing your gamertag costs a fee charged by Xbox.
 
-The fee amount can vary by region and currency, so it is worth getting your name right the first time.`
+The fee amount can vary by region and currency, so it is worth getting your name right the first time. Use our <a href="/gamertag-optimizer" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Gamertag Optimizer</a> to clean up your current name before paying for a change.`
   },
   {
-    id: "9",
+    id: "8",
     question: "Is a Gamertag the Same as a Username on Xbox?",
     answer: `No. Your gamertag is the public name other players see on friend lists, lobbies, leaderboards, and your Xbox profile. Your Microsoft account username is separate and used only for login.
 
-Your gamertag is what defines your identity across Xbox Live. Your Microsoft account username stays private.`
+Your gamertag is what defines your identity across Xbox Live. You can look up any public Xbox profile using our <a href="/xbox-gamertag-search" style="color: hsl(107 76% 26%); text-decoration: underline; font-weight: 600;">Xbox Gamertag Search</a> tool.`
   },
   {
-    id: "10",
+    id: "9",
     question: "Can I Generate Xbox Gamertags in Japanese or Spanish?",
     answer: `Yes. The generator supports 14 languages including Japanese, Spanish, Arabic, Korean, French, German, and more. Select your preferred language in the language filter before generating to get name ideas that match that language style.`
   },
   {
-    id: "11",
+    id: "10",
     question: "Is This Website Affiliated With Xbox or Microsoft?",
     answer: `No. Xbox Gamertag Generator is an independent tool website and is not affiliated with, endorsed by, or sponsored by Microsoft or Xbox. Xbox and related names are trademarks of Microsoft Corporation.`
   }
@@ -182,8 +173,8 @@ const faqSchema = {
                   <p
                     class="text-sm leading-relaxed whitespace-pre-line"
                     style="font-family:'Inter',sans-serif; color: hsl(215 16% 47%); line-height: 1.75;"
+                    set:html={part.trim()}
                   >
-                    {part.trim()}
                   </p>
                 ))}
             </div>
@@ -217,6 +208,14 @@ const faqSchema = {
   }
   .faq-content p {
     color: hsl(215 16% 47%) !important;
+  }
+  .faq-content a {
+    color: hsl(107 76% 26%);
+    text-decoration: underline;
+    font-weight: 600;
+  }
+  .faq-content a:hover {
+    color: hsl(107 76% 38%);
   }
   @media (prefers-reduced-motion: reduce) {
     .faq-content { transition: none !important; }
