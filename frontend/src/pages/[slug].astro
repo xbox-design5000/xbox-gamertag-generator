@@ -5,7 +5,7 @@ import RelatedTools from "../components/blog/RelatedTools.astro";
 import { client, urlFor } from "../lib/sanity";
 import { POST_QUERY, SLUGS_QUERY } from "../lib/queries";
 import { toHTML } from "@portabletext/to-html";
-
+import AuthorBio from "../components/blog/AuthorBio.astro";
 export async function getStaticPaths() {
   const posts = await client.fetch(SLUGS_QUERY);
   return posts.map((post: any) => ({ params: { slug: post.slug } }));
@@ -71,10 +71,11 @@ const schema = {
   image: coverImageUrl,
   datePublished: post.publishedAt,
   dateModified: post.updatedAt || post.publishedAt,
-  author: {
-    "@type": "Person",
-    name: post.author?.name || "Xbox Gamertag Generator",
-  },
+ author: {
+  "@type": "Person",
+  name: post.author?.name || "Xbox Gamertag Generator",
+  url: post.author?.slug ? `https://xboxgamertaggenerator.com/author/${post.author.slug}` : undefined,
+},
   publisher: {
     "@type": "Organization",
     name: "Xbox Gamertag Generator",
@@ -129,7 +130,7 @@ const schema = {
               <svg class="h-4 w-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A10.966 10.966 0 0112 15c2.125 0 4.109.602 5.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span>By <strong class="font-semibold text-dark-heading">{post.author.name}</strong></span>
+           <span>By <a href={`/author/${post.author.slug}`} class="font-semibold text-dark-heading hover:text-brand transition-colors">{post.author.name}</a></span>
             </div>
           )}
           {post.publishedAt && (
@@ -407,6 +408,13 @@ const schema = {
               <p class="text-xs font-bold tracking-widest uppercase mb-2 text-dark-body">Advertisement</p>
               <div class="rounded h-24 bg-white-border"></div>
             </div>
+
+            <!-- Author Bio -->
+{post.author && (
+  <div class="px-6 sm:px-8 pb-8 pt-6 border-t border-white-border">
+    <AuthorBio author={post.author} />
+  </div>
+)}
 
             <!-- Tags -->
             {post.tags && post.tags.length > 0 && (

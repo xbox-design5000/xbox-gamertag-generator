@@ -1811,7 +1811,8 @@
     {"value": "space", "label": "Space"},
     {"value": "music", "label": "Music"},
     {"value": "food", "label": "Food"},
-    {"value": "funny", "label": "Funny"}
+    {"value": "funny", "label": "Funny"},
+    {"value": "anime", "label": "Anime"} 
   ],
   "languages": [
     {"value": "english", "label": "English"},
