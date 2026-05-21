@@ -3,13 +3,10 @@ import MainLayout from "../layouts/MainLayout.astro";
 import Header from "../components/layout/Header.astro";
 import RelatedTools from "../components/blog/RelatedTools.astro";
 import { client, urlFor } from "../lib/sanity";
-import { POST_QUERY, SLUGS_QUERY } from "../lib/queries";
+import { POST_QUERY } from "../lib/queries";
 import { toHTML } from "@portabletext/to-html";
 import AuthorBio from "../components/blog/AuthorBio.astro";
-export async function getStaticPaths() {
-  const posts = await client.fetch(SLUGS_QUERY);
-  return posts.map((post: any) => ({ params: { slug: post.slug } }));
-}
+
 
 type TocItem = {
   id: string;

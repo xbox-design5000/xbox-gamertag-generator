@@ -2,14 +2,8 @@
 import MainLayout from "../../layouts/MainLayout.astro";
 import Header from "../../components/layout/Header.astro";
 import { client, urlFor } from "../../lib/sanity";
-import { AUTHOR_QUERY, AUTHORS_QUERY } from "../../lib/queries";
+import { AUTHOR_QUERY } from "../../lib/queries";
 
-export async function getStaticPaths() {
-  const authors = await client.fetch(AUTHORS_QUERY);
-  return authors.map((author: any) => ({
-    params: { slug: author.slug },
-  }));
-}
 
 const { slug } = Astro.params;
 const author = await client.fetch(AUTHOR_QUERY, { slug });

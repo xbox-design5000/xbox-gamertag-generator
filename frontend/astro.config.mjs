@@ -3,6 +3,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import sanity from "@sanity/astro";
+import node from "@astrojs/node";
 
 const toolPages = new Set([
   "/gamertag-price-checker",
@@ -30,8 +31,9 @@ const legalPages = new Set([
 ]);
 
 export default defineConfig({
-  output: "static",
+  output: "server",
   site: "https://xboxgamertaggenerator.com",
+  adapter: node({ mode: "standalone" }),
 
   prefetch: {
     prefetchAll: false,
@@ -40,13 +42,13 @@ export default defineConfig({
 
   integrations: [
     react(),
-  sanity({
-  projectId: 'ezhha3lz',
-  dataset: 'production',
-  useCdn: false,
-  apiVersion: '2025-05-11',
-  studioBasePath: '/studio',
-}),
+    sanity({
+      projectId: 'ezhha3lz',
+      dataset: 'production',
+      useCdn: true,
+      apiVersion: '2025-05-11',
+      studioBasePath: '/studio',
+    }),
     sitemap({
       filter: (page) =>
         !page.includes("/api/") &&
