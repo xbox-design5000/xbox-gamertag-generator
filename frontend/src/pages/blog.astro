@@ -7,6 +7,11 @@ import { urlFor } from "../lib/sanity";
 
 const sanityPosts = await client.fetch(POSTS_QUERY);
 
+
+console.log('Project ID:', import.meta.env.PUBLIC_SANITY_PROJECT_ID);
+console.log('Posts fetched:', sanityPosts.length);
+console.log('Post titles:', sanityPosts.map((p: any) => p.title));
+
 const blogPosts = sanityPosts.map((post: any) => ({
   id: post.slug,
   title: post.title,
