@@ -2,7 +2,7 @@ name: Redeploy on Sanity Publish
 
 on:
   repository_dispatch:
-    types: [sanity-publish]
+    types: ["*"]
 
 jobs:
   redeploy:
