@@ -34,6 +34,7 @@ export default defineConfig({
   output: "server",
   site: "https://xboxgamertaggenerator.com",
   adapter: node({ mode: "standalone" }),
+  trailingSlash: "ignore",
 
   prefetch: {
     prefetchAll: false,
