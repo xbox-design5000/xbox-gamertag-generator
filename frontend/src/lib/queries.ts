@@ -24,11 +24,12 @@ export const POST_QUERY = `*[_type == "post" && slug.current == $slug][0] {
   "categories": categories[]->{ name, "slug": slug.current },
   "tags": tags[]->{ name, "slug": slug.current },
   seo,
+  "categorySlug": categories[0]->slug.current,
   "relatedPosts": *[
     _type == "post" &&
     !(_id in path("drafts.**")) &&
     slug.current != $slug &&
-    count(categories[@->slug.current == ^.^.categories[]->slug.current]) > 0
+    references(*[_type == "category" && slug.current == ^.categories[0]->slug.current]._id)
   ] | order(publishedAt desc) [0...3] {
     title,
     "slug": slug.current,
