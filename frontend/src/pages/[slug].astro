@@ -6,7 +6,7 @@ import { client, urlFor } from "../lib/sanity";
 import { POST_QUERY } from "../lib/queries";
 import { toHTML } from "@portabletext/to-html";
 import AuthorBio from "../components/blog/AuthorBio.astro";
-
+import RelatedPosts from "../components/blog/RelatedPosts.astro";
 type TocItem = {
   id: string;
   title: string;
@@ -262,11 +262,11 @@ const schema = {
                 </a>
               </div>
 
-              <!-- Related Posts -->
-              <section class="p-6 sm:p-8 border-t border-gray-200">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Related Posts</h2>
-                <p class="text-sm text-gray-500">More articles coming soon.</p>
-              </section>
+            <!-- Related Posts -->
+<section class="p-6 sm:p-8 border-t border-gray-200">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6">Related Posts</h2>
+  <RelatedPosts posts={post.relatedPosts ?? []} />
+</section>
 
               <!-- Related Tools — Lovable style -->
               <section class="p-6 sm:p-8 border-t border-gray-200">

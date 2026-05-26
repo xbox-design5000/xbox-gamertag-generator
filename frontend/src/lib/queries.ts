@@ -23,7 +23,20 @@ export const POST_QUERY = `*[_type == "post" && slug.current == $slug][0] {
   "author": author->{ name, "slug": slug.current, bio, photo, role, socialLinks },
   "categories": categories[]->{ name, "slug": slug.current },
   "tags": tags[]->{ name, "slug": slug.current },
-  seo
+  seo,
+  "relatedPosts": *[
+    _type == "post" &&
+    !(_id in path("drafts.**")) &&
+    slug.current != $slug &&
+    count(categories[@->slug.current == ^.^.categories[]->slug.current]) > 0
+  ] | order(publishedAt desc) [0...3] {
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt,
+    readingTime,
+    "featuredImage": featuredImage { asset, alt }
+  }
 }`;
 
 export const SLUGS_QUERY = `*[_type == "post" && !(_id in path("drafts.**"))]{ "slug": slug.current }`;
