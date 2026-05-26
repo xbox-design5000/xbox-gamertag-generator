@@ -14,7 +14,9 @@ const blogPosts = sanityPosts.map((post: any) => ({
   excerpt: post.excerpt ?? '',
   readTime: post.readingTime ? `${post.readingTime} min read` : '5 min read',
 slug: post.slug,
-  coverImage: post.featuredImage ? urlFor(post.featuredImage).width(600).height(400).fit('crop').auto('format').url() : null,
+ coverImage: post.featuredImage?.asset?._ref 
+  ? urlFor(post.featuredImage).width(600).height(400).fit('crop').auto('format').url() 
+  : null,
 }));
 
 const postsPerPage = 6;
