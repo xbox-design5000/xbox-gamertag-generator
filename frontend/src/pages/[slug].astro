@@ -155,22 +155,21 @@ const schema = {
       </div>
     </section>
 
-    <!-- Cover Image -->
-    {coverImageUrl && (
-      <section class="px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 pt-5 pb-9 bg-white">
-        <div class="max-w-4xl mx-auto">
-          <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
-            <img
-              src={coverImageUrl}
-              alt={post.coverImage?.alt || post.title}
-              class="w-full h-full object-cover"
-              loading="eager"
-            />
-          </div>
-        </div>
-      </section>
-    )}
-
+<!-- Cover Image -->
+{coverImageUrl && (
+  <section class="px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 pt-5 pb-9 bg-white">
+    <div class="max-w-4xl mx-auto">
+      <div class="rounded-xl overflow-hidden shadow-lg">
+        <img
+          src={coverImageUrl}
+          alt={post.coverImage?.alt || post.title}
+          class="w-full h-auto"
+          loading="eager"
+        />
+      </div>
+    </div>
+  </section>
+)}
     <!-- Main Content -->
     <div class="bg-gray-100 min-h-screen pt-2 pb-0">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-0">
