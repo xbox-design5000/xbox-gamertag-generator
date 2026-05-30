@@ -4,6 +4,25 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import sanity from "@sanity/astro";
 import node from "@astrojs/node";
+import { createClient } from "@sanity/client";
+
+const sanityClient = createClient({
+  projectId: "ezhha3lz",
+  dataset: "production",
+  apiVersion: "2025-05-11",
+  useCdn: true,
+});
+
+const posts = await sanityClient.fetch(
+  `*[_type == "post" && !(_id in path("drafts.**"))]{
+    "slug": slug.current,
+    publishedAt
+  }`
+);
+
+const authors = await sanityClient.fetch(
+  `*[_type == "author"]{ "slug": slug.current }`
+);
 
 const toolPages = new Set([
   "/gamertag-price-checker",
@@ -51,6 +70,14 @@ export default defineConfig({
       studioBasePath: '/studio',
     }),
     sitemap({
+      customPages: [
+        ...posts.map(post =>
+          `https://xboxgamertaggenerator.com/${post.slug}`
+        ),
+        ...authors.map(author =>
+          `https://xboxgamertaggenerator.com/author/${author.slug}`
+        ),
+      ],
       filter: (page) =>
         !page.includes("/api/") &&
         !page.includes("/admin/") &&
