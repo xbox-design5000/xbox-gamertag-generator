@@ -335,14 +335,13 @@ const schema = {
                 </div>
               </section>
 
-           <!-- Tags -->
-{post.tags && post.tags.length > 0 && (
+        {post.tags && post.tags.length > 0 && (
   <div class="px-6 sm:px-8 pb-6 pt-4 border-t border-gray-200">
     <p class="text-xs font-bold tracking-widest uppercase mb-3 text-gray-500">Tags</p>
     <div class="flex flex-wrap gap-2">
-      {post.tags.map((tag: string) => (
+      {post.tags.map((tag: any) => (
         <span class="text-xs px-3 py-1 rounded-full font-medium bg-gray-100 text-gray-700 border border-gray-200">
-          #{tag}
+          #{typeof tag === 'string' ? tag : tag.name}
         </span>
       ))}
     </div>
