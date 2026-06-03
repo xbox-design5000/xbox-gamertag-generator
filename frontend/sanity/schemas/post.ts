@@ -63,12 +63,15 @@ export default defineType({
       title: 'Categories',
       of: [{ type: 'reference', to: [{ type: 'category' }] }],
     }),
-    defineField({
-      name: 'tags',
-      type: 'array',
-      title: 'Tags',
-      of: [{ type: 'reference', to: [{ type: 'tag' }] }],
-    }),
+  defineField({
+  name: 'tags',
+  type: 'array',
+  title: 'Tags',
+  of: [{ type: 'string' }],
+  options: {
+    layout: 'tags'
+  },
+}),
     defineField({
       name: 'status',
       type: 'string',

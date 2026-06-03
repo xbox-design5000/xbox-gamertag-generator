@@ -22,7 +22,7 @@ export const POST_QUERY = `*[_type == "post" && slug.current == $slug][0] {
   featuredImage { asset, alt },
   "author": author->{ name, "slug": slug.current, bio, photo, role, socialLinks },
   "categories": categories[]->{ name, "slug": slug.current },
-  "tags": tags[]->{ name, "slug": slug.current },
+"tags": tags,
   seo,
   "categorySlug": categories[0]->slug.current,
   "relatedPosts": *[
