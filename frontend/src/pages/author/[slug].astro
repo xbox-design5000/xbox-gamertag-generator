@@ -100,12 +100,16 @@ const schema = {
 
     <!-- Author Posts -->
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <h2 class="text-lg font-bold text-dark-heading mb-6">
-        Articles by {author.name}
-        {author.posts && (
-          <span class="text-sm font-normal text-dark-body ml-2">({author.posts.length} articles)</span>
-        )}
-      </h2>
+     <h2 class="text-lg font-bold text-dark-heading mb-6 flex items-center justify-between">
+
+
+  <a 
+    href="/blog"
+    class="text-sm font-semibold text-xbox-green hover:underline"
+  >
+    View all Jonathan Caldwell articles
+  </a>
+</h2>
 
       {author.posts && author.posts.length > 0 ? (
         <div class="space-y-4">
